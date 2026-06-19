@@ -786,6 +786,15 @@ section {
   background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-primary));
 }
 
+.about-image-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 0;
+}
+
 .about-image-decor {
   position: absolute;
   top: -20px;
