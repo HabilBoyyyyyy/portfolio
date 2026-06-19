@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habil Baihaki | Informatics Developer Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="loader">
+      <div class="loader-logo">HB</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- PARTICLE CANVAS -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+      <a href="#hero" class="nav-logo">HB.</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#techstack">Tech Stack</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#skills" class="mobile-link">Skills</a>
+      <a href="#techstack" class="mobile-link">Tech Stack</a>
+      <a href="#projects" class="mobile-link">Projects</a>
+      <a href="#experience" class="mobile-link">Experience</a>
+      <a href="#education" class="mobile-link">Education</a>
+      <a href="#certificates" class="mobile-link">Certificates</a>
+      <a href="#timeline" class="mobile-link">Timeline</a>
+      <a href="#blog" class="mobile-link">Blog</a>
+      <a href="#achievements" class="mobile-link">Achievements</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-bg-gradient g1"></div>
+      <div class="hero-bg-gradient g2"></div>
+      <div class="hero-bg-gradient g3"></div>
+
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Open to Opportunities
+        </div>
+        <h1 class="hero-title">
+          <span class="line">Hi, I'm</span>
+          <span class="line gradient-text">Habil Baihaki</span>
+        </h1>
+        <p class="hero-subtitle">
+          Informatics Student & Web Developer crafting
+          <span class="hero-typed" id="typed"></span>
+        </p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">
+            <i class="fas fa-rocket"></i> View My Work
+          </a>
+          <a href="#contact" class="btn btn-secondary">
+            <i class="fas fa-paper-plane"></i> Get In Touch
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number" data-count="15">0</div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number" data-count="3">0</div>
+            <div class="stat-label">Years Learning</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number" data-count="5">0</div>
+            <div class="stat-label">Certifications</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Who I Am</span>
+          <h2 class="section-title">About Me</h2>
+          <p class="section-subtitle">Get to know the person behind the code</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-image reveal-left">
+            <div class="about-image-wrapper">
+              <div class="about-image-placeholder">
+                <i class="fas fa-user-astronaut"></i>
+              </div>
+            </div>
+            <div class="about-image-decor"></div>
+            <div class="about-image-glow"></div>
+          </div>
+          <div class="about-text reveal-right">
+            <h3>I build <span>digital experiences</span> that matter.</h3>
+            <p>
+              An enthusiastic and dedicated Informatics student with a strong
+              passion for software development, artificial intelligence, and
+              language learning. Proficient in MySQL, HTML, CSS, and JavaScript,
+              Driven to apply new knowledge through real-world projects and
+              actively honing my technical and teamwork abilities by taking on
+              key roles in campus projects and organizational activities
+            </p>
+            <div class="about-info">
+              <div class="info-item">
+                <div class="label">Name</div>
+                <div class="value">Habil Baihaki</div>
+              </div>
+              <div class="info-item">
+                <div class="label">Major</div>
+                <div class="value">Informatics / IT</div>
+              </div>
+              <div class="info-item">
+                <div class="label">University</div>
+                <div class="value">President University</div>
+              </div>
+              <div class="info-item">
+                <div class="label">Location</div>
+                <div class="value">Indonesia</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">What I Do</span>
+          <h2 class="section-title">Skills & Expertise</h2>
+          <p class="section-subtitle">
+            My core competencies in web development and technology
+          </p>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-code"></i></div>
+            <h3>Frontend Development</h3>
+            <p>
+              Building responsive, interactive user interfaces with modern
+              frameworks and clean code.
+            </p>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="--progress: 90%"></div>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-server"></i></div>
+            <h3>Backend Development</h3>
+            <p>
+              Creating robust server-side applications, APIs, and database
+              management systems.
+            </p>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="--progress: 75%"></div>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
+            <h3>UI/UX Design</h3>
+            <p>
+              Designing intuitive, beautiful interfaces focused on user
+              experience and accessibility.
+            </p>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="--progress: 85%"></div>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+            <h3>Responsive Design</h3>
+            <p>
+              Ensuring seamless experiences across all devices and screen sizes.
+            </p>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="--progress: 95%"></div>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-database"></i></div>
+            <h3>Database Management</h3>
+            <p>
+              Working with SQL and NoSQL databases for efficient data storage
+              and retrieval.
+            </p>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="--progress: 70%"></div>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-icon"><i class="fas fa-cloud"></i></div>
+            <h3>Cloud & Deployment</h3>
+            <p>
+              Deploying and managing applications on cloud platforms with CI/CD
+              pipelines.
+            </p>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" style="--progress: 65%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section id="techstack">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Tools I Use</span>
+          <h2 class="section-title">Tech Stack</h2>
+          <p class="section-subtitle">
+            Technologies and tools I work with daily
+          </p>
+        </div>
+        <div class="tech-stack-container reveal">
+          <div class="tech-item">
+            <i class="fab fa-html5"></i><span>HTML5</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-css3-alt"></i><span>CSS3</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-js"></i><span>JavaScript</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-react"></i><span>React</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-node-js"></i><span>Node.js</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-python"></i><span>Python</span>
+          </div>
+          <div class="tech-item">
+            <i class="fas fa-database"></i><span>MySQL</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-git-alt"></i><span>Git</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-figma"></i><span>Figma</span>
+          </div>
+          <div class="tech-item">
+            <i class="fas fa-terminal"></i><span>VS Code</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-docker"></i><span>Docker</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-bootstrap"></i><span>Bootstrap</span>
+          </div>
+          <div class="tech-item">
+            <i class="fas fa-wind"></i><span>Tailwind</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-vuejs"></i><span>Vue.js</span>
+          </div>
+          <div class="tech-item">
+            <i class="fab fa-laravel"></i><span>Laravel</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">My Work</span>
+          <h2 class="section-title">Featured Projects</h2>
+          <p class="section-subtitle">
+            A selection of projects I've built and contributed to
+          </p>
+        </div>
+        <div class="projects-grid">
+          <div class="project-card reveal">
+            <div class="project-image">
+              <div class="project-image-overlay">
+                <i class="fas fa-laptop-code project-image-placeholder"></i>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">React</span>
+                <span class="project-tag">Node.js</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3>E-Commerce Platform</h3>
+              <p>
+                A full-stack e-commerce application with user authentication,
+                product management, and payment integration.
+              </p>
+              <div class="project-links">
+                <a href="#"><i class="fab fa-github"></i> Source</a>
+                <a href="#"
+                  ><i class="fas fa-external-link-alt"></i> Live Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-image">
+              <div class="project-image-overlay">
+                <i class="fas fa-chart-bar project-image-placeholder"></i>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">JavaScript</span>
+                <span class="project-tag">Chart.js</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3>Analytics Dashboard</h3>
+              <p>
+                Interactive data visualization dashboard with real-time metrics,
+                charts, and customizable widgets.
+              </p>
+              <div class="project-links">
+                <a href="#"><i class="fab fa-github"></i> Source</a>
+                <a href="#"
+                  ><i class="fas fa-external-link-alt"></i> Live Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-image">
+              <div class="project-image-overlay">
+                <i class="fas fa-tasks project-image-placeholder"></i>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Vue.js</span>
+                <span class="project-tag">Firebase</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3>Productivity App</h3>
+              <p>
+                A task management and productivity application with team
+                collaboration features and smart reminders.
+              </p>
+              <div class="project-links">
+                <a href="#"><i class="fab fa-github"></i> Source</a>
+                <a href="#"
+                  ><i class="fas fa-external-link-alt"></i> Live Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-image">
+              <div class="project-image-overlay">
+                <i class="fas fa-graduation-cap project-image-placeholder"></i>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">Django</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3>Student Portal</h3>
+              <p>
+                A comprehensive student portal for course registration, grade
+                tracking, and academic resource management.
+              </p>
+              <div class="project-links">
+                <a href="#"><i class="fab fa-github"></i> Source</a>
+                <a href="#"
+                  ><i class="fas fa-external-link-alt"></i> Live Demo</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-image">
+              <div class="project-image-overlay">
+                <i class="fas fa-palette project-image-placeholder"></i>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">Figma</span>
+                <span class="project-tag">UI/UX</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3>UI/UX Concept Design</h3>
+              <p>
+                Modern UI/UX design concept for a fintech application focusing
+                on accessibility and user engagement.
+              </p>
+              <div class="project-links">
+                <a href="#"><i class="fab fa-figma"></i> View Design</a>
+                <a href="#"
+                  ><i class="fas fa-external-link-alt"></i> Case Study</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-image">
+              <div class="project-image-overlay">
+                <i class="fas fa-robot project-image-placeholder"></i>
+              </div>
+              <div class="project-tags">
+                <span class="project-tag">JavaScript</span>
+                <span class="project-tag">API</span>
+              </div>
+            </div>
+            <div class="project-info">
+              <h3>JavaScript Micro App</h3>
+              <p>
+                A collection of lightweight JavaScript applications including
+                weather app, quiz game, and calculator.
+              </p>
+              <div class="project-links">
+                <a href="#"><i class="fab fa-github"></i> Source</a>
+                <a href="#"
+                  ><i class="fas fa-external-link-alt"></i> Live Demo</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">My Journey</span>
+          <h2 class="section-title">Experience</h2>
+          <p class="section-subtitle">
+            Professional and academic experience so far
+          </p>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-content">
+              <div class="timeline-date">2024 - Present</div>
+              <h3>Freelance Web Developer</h3>
+              <h4>Self-Employed</h4>
+              <p>
+                Building custom websites and web applications for clients,
+                focusing on modern design and performance optimization.
+              </p>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-content">
+              <div class="timeline-date">2023 - 2024</div>
+              <h3>Junior Developer Intern</h3>
+              <h4>Tech Startup</h4>
+              <p>
+                Assisted in developing and maintaining web applications,
+                collaborating with senior developers on frontend and backend
+                tasks.
+              </p>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-content">
+              <div class="timeline-date">2022 - 2023</div>
+              <h3>Student Assistant</h3>
+              <h4>President University</h4>
+              <p>
+                Supported IT department with system maintenance, user support,
+                and developing internal tools.
+              </p>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- EDUCATION -->
+    <section id="education">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Academic Background</span>
+          <h2 class="section-title">Education</h2>
+          <p class="section-subtitle">Where I'm learning and growing</p>
+        </div>
+        <div class="education-card reveal">
+          <div class="education-icon"><i class="fas fa-university"></i></div>
+          <h3>President University</h3>
+          <h4>Bachelor of Information Technology - Informatics</h4>
+          <p>
+            Currently pursuing a degree in Informatics with a focus on software
+            development, data structures, algorithms, and modern web
+            technologies. Active participant in coding competitions and tech
+            community.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATES -->
+    <section id="certificates">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Credentials</span>
+          <h2 class="section-title">Certificates</h2>
+          <p class="section-subtitle">
+            Professional certifications and courses completed
+          </p>
+        </div>
+        <div class="certs-grid">
+          <div class="cert-card reveal">
+            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
+            <h3>Web Development Bootcamp</h3>
+            <p>
+              Complete web development course covering HTML, CSS, JavaScript,
+              React, and Node.js
+            </p>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
+            <h3>JavaScript Algorithms & Data Structures</h3>
+            <p>
+              Advanced JavaScript certification covering algorithms, data
+              structures, and problem solving
+            </p>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
+            <h3>UI/UX Design Fundamentals</h3>
+            <p>
+              Certificate in user interface and user experience design
+              principles and tools
+            </p>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
+            <h3>Cloud Computing Basics</h3>
+            <p>
+              Introduction to cloud services, deployment strategies, and cloud
+              architecture
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUME DOWNLOAD -->
+    <div class="resume-section reveal">
+      <h2>Ready to see my full resume?</h2>
+      <p>
+        Download my CV to get a complete overview of my skills, experience, and
+        education.
+      </p>
+      <a href="#" class="btn btn-primary" download>
+        <i class="fas fa-download"></i> Download CV / Resume
+      </a>
+    </div>
+
+    <!-- TIMELINE -->
+    <section id="timeline">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Journey So Far</span>
+          <h2 class="section-title">Timeline</h2>
+          <p class="section-subtitle">
+            Key milestones in my development journey
+          </p>
+        </div>
+        <div class="timeline-full">
+          <div class="timeline-full-item reveal">
+            <div class="timeline-full-dot"></div>
+            <div class="timeline-full-content">
+              <div class="date">2026</div>
+              <h3>Building Modern Portfolio</h3>
+              <p>
+                Created this comprehensive portfolio showcasing all projects and
+                skills.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-full-item reveal">
+            <div class="timeline-full-dot"></div>
+            <div class="timeline-full-content">
+              <div class="date">2025</div>
+              <h3>Advanced Web Development</h3>
+              <p>
+                Mastered React, Node.js, and full-stack development patterns.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-full-item reveal">
+            <div class="timeline-full-dot"></div>
+            <div class="timeline-full-content">
+              <div class="date">2024</div>
+              <h3>First Freelance Client</h3>
+              <p>Started freelancing and built websites for real clients.</p>
+            </div>
+          </div>
+          <div class="timeline-full-item reveal">
+            <div class="timeline-full-dot"></div>
+            <div class="timeline-full-content">
+              <div class="date">2023</div>
+              <h3>University Enrollment</h3>
+              <p>Joined President University's Informatics program.</p>
+            </div>
+          </div>
+          <div class="timeline-full-item reveal">
+            <div class="timeline-full-dot"></div>
+            <div class="timeline-full-content">
+              <div class="date">2022</div>
+              <h3>Started Coding</h3>
+              <p>Began learning HTML, CSS, and JavaScript fundamentals.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOG -->
+    <section id="blog">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Insights</span>
+          <h2 class="section-title">Blog Preview</h2>
+          <p class="section-subtitle">Thoughts, tutorials, and tech insights</p>
+        </div>
+        <div class="blog-grid">
+          <div class="blog-card reveal">
+            <div class="blog-image"><i class="fas fa-code"></i></div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span><i class="far fa-calendar"></i> May 2026</span>
+                <span><i class="far fa-clock"></i> 5 min read</span>
+              </div>
+              <h3>Building Scalable Web Apps with Modern JavaScript</h3>
+              <p>
+                Exploring patterns and best practices for building maintainable
+                JavaScript applications.
+              </p>
+              <a href="#" class="blog-read-more"
+                >Read More <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </div>
+          <div class="blog-card reveal">
+            <div class="blog-image"><i class="fas fa-palette"></i></div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span><i class="far fa-calendar"></i> Apr 2026</span>
+                <span><i class="far fa-clock"></i> 4 min read</span>
+              </div>
+              <h3>Design Systems: From Concept to Implementation</h3>
+              <p>
+                How to create a cohesive design system that scales with your
+                product.
+              </p>
+              <a href="#" class="blog-read-more"
+                >Read More <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </div>
+          <div class="blog-card reveal">
+            <div class="blog-image"><i class="fas fa-graduation-cap"></i></div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span><i class="far fa-calendar"></i> Mar 2026</span>
+                <span><i class="far fa-clock"></i> 6 min read</span>
+              </div>
+              <h3>My Journey as an Informatics Student in 2026</h3>
+              <p>
+                Reflections on learning, projects, and growth in the tech
+                industry.
+              </p>
+              <a href="#" class="blog-read-more"
+                >Read More <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+    <section id="achievements">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Recognition</span>
+          <h2 class="section-title">Achievements</h2>
+          <p class="section-subtitle">Milestones and accomplishments</p>
+        </div>
+        <div class="achievements-grid">
+          <div class="achievement-card reveal">
+            <div class="achievement-icon">🏆</div>
+            <h3>1st Place Hackathon</h3>
+            <p>
+              Won first place in a university hackathon with an innovative web
+              solution.
+            </p>
+          </div>
+          <div class="achievement-card reveal">
+            <div class="achievement-icon">🎖️</div>
+            <h3>Dean's List</h3>
+            <p>
+              Recognized on the Dean's List for academic excellence in computer
+              science.
+            </p>
+          </div>
+          <div class="achievement-card reveal">
+            <div class="achievement-icon">🌟</div>
+            <h3>Open Source Contributor</h3>
+            <p>
+              Contributed to multiple open-source projects with accepted pull
+              requests.
+            </p>
+          </div>
+          <div class="achievement-card reveal">
+            <div class="achievement-icon">📚</div>
+            <h3>Published Research</h3>
+            <p>
+              Co-authored a research paper on web accessibility and modern
+              frameworks.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-title">Contact Me</h2>
+          <p class="section-subtitle">Let's build something amazing together</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info reveal-left">
+            <h3>Let's work <span>together</span></h3>
+            <p>
+              Whether you're looking for a developer for your next project, need
+              a freelance web developer, or just want to connect — I'm always
+              open to new opportunities and conversations.
+            </p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-item-text">
+                  <div class="label">Email</div>
+                  <div class="value">habil.baihaki@email.com</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="contact-item-text">
+                  <div class="label">Location</div>
+                  <div class="value">Cikarang, Indonesia</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="contact-item-text">
+                  <div class="label">University</div>
+                  <div class="value">President University</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="contact-form reveal-right">
+            <form id="contactForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Your Name</label>
+                  <input type="text" placeholder="John Doe" required />
+                </div>
+                <div class="form-group">
+                  <label>Your Email</label>
+                  <input type="email" placeholder="john@email.com" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Subject</label>
+                <input type="text" placeholder="Project Collaboration" />
+              </div>
+              <div class="form-group">
+                <label>Message</label>
+                <textarea
+                  placeholder="Tell me about your project or idea..."></textarea>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="width: 100%; justify-content: center">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">HB.</div>
+          <p>
+            Informatics student and web developer passionate about creating
+            beautiful, functional digital experiences.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="GitHub"
+              ><i class="fab fa-github"></i
+            ></a>
+            <a href="#" class="social-link" aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a href="#" class="social-link" aria-label="Twitter"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a href="#" class="social-link" aria-label="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" class="social-link" aria-label="Dribbble"
+              ><i class="fab fa-dribbble"></i
+            ></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#certificates">Certificates</a></li>
+            <li><a href="#achievements">Achievements</a></li>
+            <li><a href="#" download>Resume</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Social</h4>
+          <ul>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Twitter / X</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 <span>Habil Baihaki</span>. All rights reserved.</p>
+        <p>Designed & Built with 💙</p>
+      </div>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+  </body>
+</html>
