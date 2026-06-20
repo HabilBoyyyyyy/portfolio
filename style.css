@@ -85,18 +85,8 @@ body {
 }
 
 .loader-logo {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(
-    135deg,
-    var(--accent-cyan),
-    var(--accent-blue),
-    var(--accent-purple)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  width: 180px;
+  height: auto;
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
@@ -201,14 +191,14 @@ nav.scrolled {
 }
 
 .nav-logo {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  letter-spacing: -0.5px;
+}
+
+.nav-logo-img {
+  height: 60px;
+  width: auto;
 }
 
 .nav-links {
@@ -1704,12 +1694,8 @@ footer {
 }
 
 .footer-brand .footer-logo {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  height: 70px;
+  width: auto;
   margin-bottom: 1rem;
   display: inline-block;
 }
