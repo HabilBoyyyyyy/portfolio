@@ -758,17 +758,6 @@ section {
   }
 }
 
-@media (max-width: 768px) {
-  .scroll-icon-mouse {
-    display: none;
-  }
-
-  .scroll-icon-hand {
-    display: block;
-    animation: scroll-hand-slide 1.6s ease-in-out infinite;
-  }
-}
-
 @keyframes scroll-hand-slide {
   0% {
     transform: translateY(0);
@@ -2016,6 +2005,15 @@ footer {
   .cursor,
   .cursor-dot {
     display: none;
+  }
+
+  .scroll-icon-mouse {
+    display: none;
+  }
+
+  .scroll-icon-hand {
+    display: block;
+    animation: scroll-hand-slide 1.6s ease-in-out infinite;
   }
 }
 
