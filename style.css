@@ -9,7 +9,7 @@
 :root {
   --bg-primary: #08090c;
   --bg-secondary: #0d0f14;
-  --bg-tertiary: #131620;
+  --bg-tertiary: #030303;
   --accent-cyan: #38bdf8;
   --accent-blue: #2563eb;
   --accent-purple: #7c6fe0;
@@ -1061,35 +1061,53 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  padding: 1.5rem 2rem;
-  background: var(--glass-bg);
+  gap: 0.7rem;
+}
+
+.tech-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background-color: var(--bg-tertiary);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   cursor: pointer;
-  min-width: 120px;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
 }
 
-.tech-item:hover {
-  transform: translateY(-8px);
-  border-color: var(--accent-cyan);
-  box-shadow:
-    0 15px 30px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(0, 245, 212, 0.1);
+.tech-icon-box:hover {
+  transform: translateY(-5px);
 }
 
-.tech-item i,
-.tech-item .tech-icon {
-  font-size: 2rem;
+.tech-icon-box:active {
+  transform: scale(0.9);
+}
+
+.tech-icon {
+  font-size: 1.6rem;
   color: var(--text-primary);
-  transition: color var(--transition-fast);
+  transition: color 0.3s;
 }
 
-.tech-item:hover i,
-.tech-item:hover .tech-icon {
-  color: var(--accent-cyan);
+.tech-icon-box:hover .tech-icon {
+  color: #fff;
+  animation: tech-icon-slide-in 0.3s both;
+}
+
+@keyframes tech-icon-slide-in {
+  0% {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .tech-item span {
@@ -1097,6 +1115,41 @@ section {
   color: var(--text-secondary);
   font-weight: 500;
 }
+
+/* Brand-accurate hover colors, in the same order as your tech items */
+.tech-item:nth-child(1) .tech-icon-box:hover {
+  background-color: #e34c26;
+} /* HTML5 */
+.tech-item:nth-child(2) .tech-icon-box:hover {
+  background-color: #1572b6;
+} /* CSS3 */
+.tech-item:nth-child(3) .tech-icon-box:hover {
+  background-color: #f0db4f;
+} /* JavaScript */
+.tech-item:nth-child(3) .tech-icon-box:hover .tech-icon {
+  color: #1a1a1a;
+}
+.tech-item:nth-child(4) .tech-icon-box:hover {
+  background-color: #777bb4;
+} /* PHP */
+.tech-item:nth-child(5) .tech-icon-box:hover {
+  background-color: #3776ab;
+} /* Python */
+.tech-item:nth-child(6) .tech-icon-box:hover {
+  background-color: #00599c;
+} /* C++ */
+.tech-item:nth-child(7) .tech-icon-box:hover {
+  background-color: #00758f;
+} /* MySQL */
+.tech-item:nth-child(8) .tech-icon-box:hover {
+  background-color: #00979d;
+} /* Arduino */
+.tech-item:nth-child(9) .tech-icon-box:hover {
+  background-color: #f05033;
+} /* Git */
+.tech-item:nth-child(10) .tech-icon-box:hover {
+  background-color: #007acc;
+} /* VS Code */
 
 /* ===== PROJECTS ===== */
 .projects-grid {
