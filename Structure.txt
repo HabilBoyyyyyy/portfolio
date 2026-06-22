@@ -1,0 +1,14 @@
+Porfolio
+├── Structure.txt
+├── assets
+│   ├── Files
+│   │   └── Habil_Baihaki_Ramadhan_CV.pdf
+│   └── Images
+│       ├── LOgo.png
+│       ├── Profile.png
+│       ├── hand-icon.png
+│       ├── mouse-icon.png
+│       └── trash-robot.jpeg
+├── index.html
+├── script.js
+└── style.css
