@@ -5,40 +5,6 @@ window.addEventListener("load", () => {
   }, 2200);
 });
 
-// ===== CUSTOM CURSOR =====
-const cursor = document.querySelector(".cursor");
-const cursorDot = document.querySelector(".cursor-dot");
-let mouseX = 0,
-  mouseY = 0;
-let cursorX = 0,
-  cursorY = 0;
-
-document.addEventListener("mousemove", (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  cursorDot.style.left = mouseX - 3 + "px";
-  cursorDot.style.top = mouseY - 3 + "px";
-});
-
-function animateCursor() {
-  cursorX += (mouseX - cursorX) * 0.15;
-  cursorY += (mouseY - cursorY) * 0.15;
-  cursor.style.left = cursorX - 10 + "px";
-  cursor.style.top = cursorY - 10 + "px";
-  requestAnimationFrame(animateCursor);
-}
-animateCursor();
-
-// Hover effect on interactive elements
-document
-  .querySelectorAll(
-    "a, button, .project-card, .skill-card, .tech-item, .cert-card, .achievement-card, .blog-card, .contact-item",
-  )
-  .forEach((el) => {
-    el.addEventListener("mouseenter", () => cursor.classList.add("hover"));
-    el.addEventListener("mouseleave", () => cursor.classList.remove("hover"));
-  });
-
 // ===== PARTICLES =====
 const canvas = document.getElementById("particles-canvas");
 const ctx = canvas.getContext("2d");
@@ -72,7 +38,7 @@ class Particle {
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0, 245, 212, ${this.opacity})`;
+    ctx.fillStyle = `rgba(26, 18, 8, ${this.opacity * 0.3})`;
     ctx.fill();
   }
 }
@@ -97,7 +63,7 @@ function animateParticles() {
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
         ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0, 245, 212, ${0.08 * (1 - dist / 120)})`;
+        ctx.strokeStyle = `rgba(26, 18, 8, ${0.04 * (1 - dist / 120)})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
@@ -138,13 +104,7 @@ document.querySelectorAll(".mobile-link").forEach((link) => {
 
 // ===== TYPING EFFECT =====
 const typedEl = document.getElementById("typed");
-const words = [
-  "digital experiences.",
-  "modern websites.",
-  "interactive apps.",
-  "clean interfaces.",
-  "scalable solutions.",
-];
+const words = ["digital experiences.", "modern websites.", "clean interfaces."];
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -248,16 +208,40 @@ backToTop.addEventListener("click", () => {
 });
 
 // ===== FORM SUBMISSION =====
-document.getElementById("contactForm").addEventListener("submit", (e) => {
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const btn = e.target.querySelector("button");
+  const form = e.target;
+  const btn = form.querySelector("button");
   const originalText = btn.innerHTML;
-  btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-  btn.style.background = "linear-gradient(135deg, #00d4ff, #00bbf9)";
+
+  // Loading state
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  btn.disabled = true;
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: {Accept: "application/json"},
+    });
+
+    if (response.ok) {
+      btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+      btn.style.background = "linear-gradient(135deg, #2d5a27, #3d7a34)";
+      form.reset();
+    } else {
+      btn.innerHTML = '<i class="fas fa-times"></i> Failed to Send';
+      btn.style.background = "linear-gradient(135deg, #8b1a1a, #5a1010)";
+    }
+  } catch (error) {
+    btn.innerHTML = '<i class="fas fa-times"></i> Network Error';
+    btn.style.background = "linear-gradient(135deg, #8b1a1a, #5a1010)";
+  }
+
   setTimeout(() => {
     btn.innerHTML = originalText;
     btn.style.background = "";
-    e.target.reset();
+    btn.disabled = false;
   }, 3000);
 });
 

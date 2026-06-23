@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet" />
     <link
       rel="stylesheet"
@@ -22,10 +22,6 @@
         <div class="loader-ring"></div>
       </div>
     </div>
-
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
 
     <!-- PARTICLE CANVAS -->
     <canvas id="particles-canvas"></canvas>
@@ -82,7 +78,7 @@
         </div>
         <h1 class="hero-title">
           <span class="line">Hi, I'm</span>
-          <span class="line gradient-text">Habil Baihaki</span>
+          <span class="line gradient-text">Habil Baihaki Ramadhan</span>
         </h1>
         <p class="hero-subtitle">
           Informatics Student & Web Developer crafting
@@ -95,6 +91,25 @@
           <a href="#contact" class="btn btn-secondary">
             <i class="fas fa-paper-plane"></i> Get In Touch
           </a>
+        </div>
+        <div class="hero-socials">
+          <a href="#" class="social-link" aria-label="GitHub"
+            ><i class="fab fa-github"></i
+          ></a>
+          <a
+            href="https://www.linkedin.com/in/habilbaihakiramadhan/"
+            target="_blank"
+            class="social-link"
+            aria-label="LinkedIn"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/habil_rmdhn/"
+            target="_blank"
+            class="social-link"
+            aria-label="Instagram"
+            ><i class="fab fa-instagram"></i
+          ></a>
         </div>
         <div class="hero-stats">
           <div class="stat">
@@ -135,14 +150,38 @@
         </div>
         <div class="about-grid">
           <div class="about-image reveal-left">
+            <!-- Orbiting ring -->
+            <div class="about-orbit-ring"></div>
+            <!-- Floating particles -->
+            <div class="about-particle about-particle--1"></div>
+            <div class="about-particle about-particle--2"></div>
+            <div class="about-particle about-particle--3"></div>
+            <div class="about-particle about-particle--4"></div>
+            <div class="about-particle about-particle--5"></div>
+            <!-- Animated gradient border frame -->
+            <div class="about-image-border-anim"></div>
+            <!-- Main image wrapper -->
             <div class="about-image-wrapper">
               <img
                 src="assets/Images/Profile.jpeg"
                 alt="Habil Baihaki"
                 class="about-image-photo" />
+              <!-- Inner shine overlay -->
+              <div class="about-image-shine"></div>
             </div>
-            <div class="about-image-decor"></div>
-            <div class="about-image-glow"></div>
+            <!-- Corner accents -->
+            <div class="about-corner about-corner--tl"></div>
+            <div class="about-corner about-corner--tr"></div>
+            <div class="about-corner about-corner--bl"></div>
+            <div class="about-corner about-corner--br"></div>
+            <!-- Glow effects -->
+            <div class="about-image-glow about-image-glow--cyan"></div>
+            <div class="about-image-glow about-image-glow--purple"></div>
+            <!-- Status badge -->
+            <div class="about-status-badge">
+              <span class="about-status-dot"></span>
+              Available
+            </div>
           </div>
           <div class="about-text reveal-right">
             <h3>I build <span>digital experiences</span> that matter.</h3>
@@ -501,7 +540,7 @@
     </section>
 
     <!-- EXPERIENCE -->
-    <section id="experience">
+    <!-- <section id="experience">
       <div class="container">
         <div class="section-header reveal">
           <span class="section-label">My Journey</span>
@@ -550,7 +589,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section>  -->
 
     <div class="section-divider"></div>
 
@@ -586,38 +625,25 @@
             Professional certifications and courses completed
           </p>
         </div>
-        <div class="certs-grid">
-          <div class="cert-card reveal">
-            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
-            <h3>Web Development Bootcamp</h3>
-            <p>
-              Complete web development course covering HTML, CSS, JavaScript,
-              React, and Node.js
-            </p>
+        <div class="certs-list">
+          <div class="cert-row reveal">
+            <div class="cert-row-icon"><i class="fas fa-briefcase"></i></div>
+            <div class="cert-row-info">
+              <h3>
+                English Vocational Competency Based Training Junior
+                Administrative Assistant Training Program
+              </h3>
+              <p>Indonesia's Ministry of Manpower</p>
+            </div>
           </div>
-          <div class="cert-card reveal">
-            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
-            <h3>JavaScript Algorithms & Data Structures</h3>
-            <p>
-              Advanced JavaScript certification covering algorithms, data
-              structures, and problem solving
-            </p>
-          </div>
-          <div class="cert-card reveal">
-            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
-            <h3>UI/UX Design Fundamentals</h3>
-            <p>
-              Certificate in user interface and user experience design
-              principles and tools
-            </p>
-          </div>
-          <div class="cert-card reveal">
-            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
-            <h3>Cloud Computing Basics</h3>
-            <p>
-              Introduction to cloud services, deployment strategies, and cloud
-              architecture
-            </p>
+
+          <div class="cert-row reveal">
+            <div class="cert-row-icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="cert-row-info">
+              <h3>Data Analysis Camp Batch 1</h3>
+              <p>Ousean Indonesia & Data Analyst Camp</p>
+            </div>
+            <div class="cert-row-badge">Score: 90</div>
           </div>
         </div>
       </div>
@@ -653,7 +679,7 @@
             <div class="timeline-full-dot"></div>
             <div class="timeline-full-content">
               <div class="date">2026</div>
-              <h3>Building Modern Portfolio</h3>
+              <h3>Building Portfolio</h3>
               <p>
                 Created this comprehensive portfolio showcasing all projects and
                 skills.
@@ -664,24 +690,22 @@
             <div class="timeline-full-dot"></div>
             <div class="timeline-full-content">
               <div class="date">2025</div>
-              <h3>Advanced Web Development</h3>
-              <p>
-                Mastered React, Node.js, and full-stack development patterns.
-              </p>
+              <h3>Started Learning AI developing Fundamental</h3>
+              <p>Joined Artificial Intelegence Focus in IT.</p>
+            </div>
+          </div>
+          <div class="timeline-full-item reveal">
+            <div class="timeline-full-dot"></div>
+            <div class="timeline-full-content">
+              <div class="date">2025</div>
+              <h3>First Full Website Project</h3>
+              <p>Built and Developed a website to manage Dormitory.</p>
             </div>
           </div>
           <div class="timeline-full-item reveal">
             <div class="timeline-full-dot"></div>
             <div class="timeline-full-content">
               <div class="date">2024</div>
-              <h3>First Freelance Client</h3>
-              <p>Started freelancing and built websites for real clients.</p>
-            </div>
-          </div>
-          <div class="timeline-full-item reveal">
-            <div class="timeline-full-dot"></div>
-            <div class="timeline-full-content">
-              <div class="date">2023</div>
               <h3>University Enrollment</h3>
               <p>Joined President University's Informatics program.</p>
             </div>
@@ -689,9 +713,9 @@
           <div class="timeline-full-item reveal">
             <div class="timeline-full-dot"></div>
             <div class="timeline-full-content">
-              <div class="date">2022</div>
+              <div class="date">2023</div>
               <h3>Started Coding</h3>
-              <p>Began learning HTML, CSS, and JavaScript fundamentals.</p>
+              <p>Began learning IT in highschool</p>
             </div>
           </div>
         </div>
@@ -830,7 +854,7 @@
                 </div>
                 <div class="contact-item-text">
                   <div class="label">Email</div>
-                  <div class="value">habil.baihaki@email.com</div>
+                  <div class="value">habilramadhan1005@gmail.com</div>
                 </div>
               </div>
               <div class="contact-item">
@@ -839,7 +863,7 @@
                 </div>
                 <div class="contact-item-text">
                   <div class="label">Location</div>
-                  <div class="value">Cikarang, Indonesia</div>
+                  <div class="value">East Bekasi, Indonesia</div>
                 </div>
               </div>
               <div class="contact-item">
@@ -854,24 +878,39 @@
             </div>
           </div>
           <div class="contact-form reveal-right">
-            <form id="contactForm">
+            <form
+              id="contactForm"
+              action="https://formspree.io/f/xykqzeed"
+              method="POST">
               <div class="form-row">
                 <div class="form-group">
                   <label>Your Name</label>
-                  <input type="text" placeholder="John Doe" required />
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    required />
                 </div>
                 <div class="form-group">
                   <label>Your Email</label>
-                  <input type="email" placeholder="john@email.com" required />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="john@email.com"
+                    required />
                 </div>
               </div>
               <div class="form-group">
                 <label>Subject</label>
-                <input type="text" placeholder="Project Collaboration" />
+                <input
+                  type="text"
+                  name="subject"
+                  placeholder="Project Collaboration" />
               </div>
               <div class="form-group">
                 <label>Message</label>
                 <textarea
+                  name="message"
                   placeholder="Tell me about your project or idea..."></textarea>
               </div>
               <button
@@ -888,73 +927,27 @@
 
     <!-- FOOTER -->
     <footer>
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <img src="assets/Images/LOgo.png" alt="Logo" class="footer-logo" />
-          <p>
-            Informatics student and web developer passionate about creating
-            beautiful, functional digital experiences.
-          </p>
-          <div class="social-links">
-            <a href="#" class="social-link" aria-label="GitHub"
-              ><i class="fab fa-github"></i
-            ></a>
-            <a
-              href="https://www.linkedin.com/in/habilbaihakiramadhan/"
-              target="_blank"
-              class="social-link"
-              aria-label="LinkedIn"
-              ><i class="fab fa-linkedin-in"></i
-            ></a>
-            <a
-              href="https://www.instagram.com/habil_rmdhn/"
-              target="_blank"
-              class="social-link"
-              aria-label="Instagram"
-              ><i class="fab fa-instagram"></i
-            ></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h4>Navigation</h4>
-          <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Resources</h4>
-          <ul>
-            <!-- <li><a href="#blog">Blog</a></li> -->
-            <li><a href="#certificates">Certificates</a></li>
-            <!-- <li><a href="#achievements">Achievements</a></li> -->
-            <li><a href="Habil_Baihaki_Ramadhan_CV.pdf" download>Resume</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Social</h4>
-          <ul>
-            <li><a href="#">GitHub</a></li>
-            <li>
-              <a
-                href="https://www.linkedin.com/in/habilbaihakiramadhan/"
-                target="_blank"
-                >LinkedIn</a
-              >
-            </li>
-            <li>
-              <a href="https://www.instagram.com/habil_rmdhn/" target="_blank"
-                >Instagram</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
       <div class="footer-bottom">
         <p>© 2026 <span>Habil Baihaki</span>. All rights reserved.</p>
+        <div class="footer-bottom-socials">
+          <a href="#" class="social-link" aria-label="GitHub"
+            ><i class="fab fa-github"></i
+          ></a>
+          <a
+            href="https://www.linkedin.com/in/habilbaihakiramadhan/"
+            target="_blank"
+            class="social-link"
+            aria-label="LinkedIn"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/habil_rmdhn/"
+            target="_blank"
+            class="social-link"
+            aria-label="Instagram"
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
         <p>Made with 𓆩❤︎𓆪 and a lot of curiosity</p>
       </div>
     </footer>
