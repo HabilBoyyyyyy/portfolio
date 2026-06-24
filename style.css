@@ -905,415 +905,185 @@ section {
   align-items: center;
 }
 
-/* ===== PROFILE PHOTO - FANCY STYLES ===== */
+/* ===== PROFILE PHOTO — PINNED PHOTO PAPER ===== */
 
-/* --- Keyframes --- */
-@keyframes aboutOrbitSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes aboutBorderRotate {
-  from {
-    --about-border-angle: 0deg;
-  }
-  to {
-    --about-border-angle: 360deg;
-  }
-}
-
-@keyframes aboutParticleFloat1 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.7;
-  }
-  25% {
-    transform: translate(15px, -20px) scale(1.3);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(-10px, -35px) scale(0.8);
-    opacity: 0.5;
-  }
-  75% {
-    transform: translate(-20px, -10px) scale(1.1);
-    opacity: 0.9;
-  }
-}
-
-@keyframes aboutParticleFloat2 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.5;
-  }
-  33% {
-    transform: translate(-18px, 25px) scale(1.4);
-    opacity: 1;
-  }
-  66% {
-    transform: translate(12px, 10px) scale(0.7);
-    opacity: 0.6;
-  }
-}
-
-@keyframes aboutShineSlide {
-  0% {
-    transform: translateX(-100%) rotate(25deg);
-  }
-  100% {
-    transform: translateX(200%) rotate(25deg);
-  }
-}
-
-@keyframes aboutStatusPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(45, 90, 39, 0);
-  }
-}
-
-@keyframes aboutGlowPulse {
-  0%,
-  100% {
-    opacity: 0.12;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.22;
-    transform: scale(1.1);
-  }
-}
-
-/* --- Container --- */
 .about-image {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 30px;
+  padding: 20px;
 }
 
-/* --- Orbiting dashed ring --- */
-.about-orbit-ring {
-  position: absolute;
-  inset: -5px;
-  border: 2px dashed rgba(139, 26, 26, 0.12);
-  border-radius: 24px;
-  animation: aboutOrbitSpin 25s linear infinite;
-  pointer-events: none;
-}
-
-/* --- Floating particles --- */
-.about-particle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.about-particle--1 {
-  top: 8%;
-  left: 12%;
-  background: var(--crimson);
-  animation: aboutParticleFloat1 6s ease-in-out infinite;
-}
-
-.about-particle--2 {
-  top: 15%;
-  right: 8%;
-  background: var(--brass);
-  width: 4px;
-  height: 4px;
-  animation: aboutParticleFloat2 7s ease-in-out infinite 0.5s;
-}
-
-.about-particle--3 {
-  bottom: 20%;
-  left: 5%;
-  background: var(--crimson);
-  width: 5px;
-  height: 5px;
-  animation: aboutParticleFloat1 8s ease-in-out infinite 1s;
-}
-
-.about-particle--4 {
-  bottom: 10%;
-  right: 15%;
-  background: var(--brass);
-  width: 3px;
-  height: 3px;
-  animation: aboutParticleFloat2 5.5s ease-in-out infinite 1.5s;
-}
-
-.about-particle--5 {
-  top: 50%;
-  right: 2%;
-  background: var(--brass-glow);
-  width: 4px;
-  height: 4px;
-  animation: aboutParticleFloat1 7.5s ease-in-out infinite 2s;
-}
-
-/* --- Animated gradient border frame --- */
-.about-image-border-anim {
-  position: absolute;
-  inset: 12px;
-  border-radius: 22px;
-  padding: 3px;
-  background: conic-gradient(
-    from var(--about-border-angle, 0deg),
-    var(--crimson),
-    var(--brass),
-    var(--crimson-dim),
-    var(--crimson)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: aboutBorderRotate 4s linear infinite;
-  z-index: 2;
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
-}
-
-/* --- Main image wrapper --- */
-.about-image-wrapper {
+/* --- Outer wrapper with tilt --- */
+.pinned-photo {
   position: relative;
+  display: inline-block;
+  transform: rotate(-2.5deg);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pinned-photo:hover {
+  transform: rotate(0.5deg) translateY(-6px);
+}
+
+/* --- The pushpin --- */
+.photo-pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+    #d44040,
+    #8b1a1a 60%,
+    #5a1010
+  );
+  box-shadow:
+    0 2px 4px rgba(20, 12, 0, 0.4),
+    0 4px 8px rgba(20, 12, 0, 0.2),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Pin highlight dot */
+.photo-pin::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  width: 6px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* Pin needle shadow on paper */
+.photo-pin::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 4px;
+  background: rgba(20, 12, 0, 0.15);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+/* --- The photo paper / polaroid frame --- */
+.photo-paper {
+  background: #faf8f2;
+  padding: 12px 12px 40px 12px;
+  border-radius: 2px;
+  box-shadow:
+    0 1px 1px rgba(20, 12, 0, 0.08),
+    0 2px 4px rgba(20, 12, 0, 0.06),
+    0 4px 8px rgba(20, 12, 0, 0.05);
+  position: relative;
+  transition: box-shadow 0.5s ease;
+}
+
+.pinned-photo:hover .photo-paper {
+  box-shadow:
+    0 2px 3px rgba(20, 12, 0, 0.1),
+    0 8px 20px rgba(20, 12, 0, 0.12),
+    0 16px 40px rgba(20, 12, 0, 0.08);
+}
+
+/* Subtle paper texture gradient */
+.photo-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.02) 100%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Aged paper edge on the right */
+.photo-paper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.04),
+    transparent
+  );
+  border-radius: 0 2px 2px 0;
+  pointer-events: none;
+}
+
+/* --- Photo image area --- */
+.photo-frame {
   width: 100%;
-  aspect-ratio: 4/5;
-  border-radius: 20px;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--parchment3), var(--parchment));
-  border: 2px solid var(--paper-border-strong);
-  z-index: 3;
-  box-shadow:
-    0 15px 40px rgba(20, 12, 0, 0.15),
-    0 4px 12px rgba(20, 12, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition:
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--parchment3);
+  border: 1px solid rgba(20, 12, 0, 0.08);
 }
 
-.about-image:hover .about-image-wrapper {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow:
-    0 25px 60px rgba(20, 12, 0, 0.2),
-    0 8px 20px rgba(139, 26, 26, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-/* --- Photo --- */
-.about-image-photo {
+.photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  position: relative;
-  z-index: 0;
-  filter: sepia(0.1) saturate(0.95) contrast(1.02);
-  transition:
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.6s ease;
+  filter: sepia(0.08) saturate(0.95) contrast(1.02);
+  transition: filter 0.4s ease;
 }
 
-.about-image:hover .about-image-photo {
-  transform: scale(1.05);
-  filter: sepia(0.05) saturate(1.1) contrast(1.05);
+.pinned-photo:hover .photo-img {
+  filter: sepia(0.03) saturate(1.05) contrast(1.04);
 }
 
-/* --- Inner shine overlay --- */
-.about-image-shine {
+/* --- Caption text below photo --- */
+.photo-caption {
+  text-align: center;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* --- Wall shadow behind the paper --- */
+.photo-wall-shadow {
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  overflow: hidden;
-  pointer-events: none;
-  border-radius: 20px;
-}
-
-.about-image-shine::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 60%;
-  height: 200%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.08),
-    transparent
-  );
-  transform: translateX(-100%) rotate(25deg);
-  animation: aboutShineSlide 6s ease-in-out infinite 2s;
-}
-
-/* --- Corner accents --- */
-.about-corner {
-  position: absolute;
-  width: 20px;
+  bottom: -6px;
+  left: 8px;
+  right: 8px;
   height: 20px;
-  z-index: 4;
-  opacity: 0.4;
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
-}
-
-.about-corner--tl {
-  top: 2px;
-  left: 2px;
-  border-top: 2px solid var(--crimson);
-  border-left: 2px solid var(--crimson);
-  border-top-left-radius: 6px;
-}
-
-.about-corner--tr {
-  top: 2px;
-  right: 2px;
-  border-top: 2px solid var(--brass);
-  border-right: 2px solid var(--brass);
-  border-top-right-radius: 6px;
-}
-
-.about-corner--bl {
-  bottom: 2px;
-  left: 2px;
-  border-bottom: 2px solid var(--brass);
-  border-left: 2px solid var(--brass);
-  border-bottom-left-radius: 6px;
-}
-
-.about-corner--br {
-  bottom: 2px;
-  right: 2px;
-  border-bottom: 2px solid var(--crimson);
-  border-right: 2px solid var(--crimson);
-  border-bottom-right-radius: 6px;
-}
-
-.about-image:hover .about-corner {
-  opacity: 1;
-}
-
-.about-image:hover .about-corner--tl {
-  transform: translate(-4px, -4px);
-}
-.about-image:hover .about-corner--tr {
-  transform: translate(4px, -4px);
-}
-.about-image:hover .about-corner--bl {
-  transform: translate(-4px, 4px);
-}
-.about-image:hover .about-corner--br {
-  transform: translate(4px, 4px);
-}
-
-/* --- Glow effects --- */
-.about-image-glow {
-  position: absolute;
-  width: 200px;
-  height: 200px;
+  background: rgba(20, 12, 0, 0.08);
   border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
+  filter: blur(10px);
+  z-index: -1;
+  transition: all 0.5s ease;
 }
 
-.about-image-glow--cyan {
-  bottom: -40px;
-  right: -40px;
-  background: var(--crimson);
-  opacity: 0.1;
-  animation: aboutGlowPulse 5s ease-in-out infinite;
+.pinned-photo:hover .photo-wall-shadow {
+  bottom: -14px;
+  filter: blur(16px);
+  opacity: 0.7;
 }
 
-.about-image-glow--purple {
-  top: -30px;
-  left: -30px;
-  background: var(--brass-glow);
-  opacity: 0.1;
-  animation: aboutGlowPulse 5s ease-in-out infinite 2.5s;
-}
+/* ===== END PROFILE PHOTO ===== */
 
-.about-image:hover .about-image-glow--cyan {
-  opacity: 0.2;
-}
-
-.about-image:hover .about-image-glow--purple {
-  opacity: 0.18;
-}
-
-/* --- Status badge --- */
-.about-status-badge {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  background: rgba(240, 230, 204, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(45, 90, 39, 0.25);
-  border-radius: 30px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  font-family: var(--font-mono);
-  color: var(--green-ink);
-  letter-spacing: 0.04em;
-  z-index: 10;
-  box-shadow: 0 4px 16px rgba(20, 12, 0, 0.12);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.about-image:hover .about-status-badge {
-  transform: translateX(-50%) translateY(-4px);
-  box-shadow:
-    0 8px 24px rgba(20, 12, 0, 0.18),
-    0 0 10px rgba(45, 90, 39, 0.08);
-}
-
-.about-status-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--green-ink);
-  border-radius: 50%;
-  display: inline-block;
-  animation: aboutStatusPulse 2s ease-in-out infinite;
-}
-
-/* --- Hover: intensify border animation --- */
-.about-image:hover .about-image-border-anim {
-  opacity: 0.8;
-}
-
-.about-image:hover .about-orbit-ring {
-  border-color: rgba(139, 26, 26, 0.25);
-}
-
-/* ===== END PROFILE PHOTO FANCY STYLES ===== */
 
 .about-text h3 {
   font-family: var(--font-title);
