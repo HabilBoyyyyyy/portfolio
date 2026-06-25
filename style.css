@@ -234,7 +234,6 @@ body::before {
   opacity: 0.4;
 }
 
-
 /* ===== NAVIGATION ===== */
 nav {
   position: fixed;
@@ -937,11 +936,7 @@ section {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%,
-    #d44040,
-    #8b1a1a 60%,
-    #5a1010
-  );
+  background: radial-gradient(circle at 35% 35%, #d44040, #8b1a1a 60%, #5a1010);
   box-shadow:
     0 2px 4px rgba(20, 12, 0, 0.4),
     0 4px 8px rgba(20, 12, 0, 0.2),
@@ -1001,14 +996,13 @@ section {
   position: absolute;
   inset: 0;
   border-radius: 2px;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.4) 0%,
-      transparent 40%,
-      transparent 60%,
-      rgba(0, 0, 0, 0.02) 100%
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
   pointer-events: none;
   z-index: 1;
 }
@@ -1021,11 +1015,7 @@ section {
   right: 0;
   bottom: 0;
   width: 6px;
-  background: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.04),
-    transparent
-  );
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.04), transparent);
   border-radius: 0 2px 2px 0;
   pointer-events: none;
 }
@@ -1083,7 +1073,6 @@ section {
 }
 
 /* ===== END PROFILE PHOTO ===== */
-
 
 .about-text h3 {
   font-family: var(--font-title);
@@ -1766,7 +1755,11 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(139, 26, 26, 0.08), rgba(154, 125, 58, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(139, 26, 26, 0.08),
+    rgba(154, 125, 58, 0.08)
+  );
   border-radius: 10px;
   font-size: 1.1rem;
   color: var(--crimson);
@@ -2249,7 +2242,6 @@ footer {
   border-radius: 8px;
 }
 
-
 /* ===== BACK TO TOP ===== */
 .back-to-top {
   position: fixed;
@@ -2297,7 +2289,6 @@ footer {
   .contact-grid {
     grid-template-columns: 1fr;
   }
-
 
   .timeline::before {
     left: 20px;
@@ -2358,12 +2349,10 @@ footer {
     grid-template-columns: 1fr;
   }
 
-
   .footer-bottom {
     flex-direction: column;
     text-align: center;
   }
-
 
   .scroll-icon-mouse {
     display: none;
