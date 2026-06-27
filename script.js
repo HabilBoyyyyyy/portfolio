@@ -267,27 +267,290 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// ===== TILT EFFECT ON PROJECT CARDS =====
-document.querySelectorAll(".project-card").forEach((card) => {
-  card.addEventListener("mousemove", (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / 20;
-    const rotateY = (centerX - x) / 20;
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+// ===== FEATURED PROJECTS — CASE FILES =====
+// Add more screenshots to any project's `images` array to get a multi-slide
+// carousel automatically — one image just shows a static photo, no carousel UI.
+const projectsData = [
+  {
+    caseNo: "001",
+    icon: "fa-robot",
+    title: "Trash-Collecting Robot",
+    description:
+      "A robotic arm built with an Arduino Uno, combining a custom acrylic robotic hand with a mobile chassis to autonomously locate, grab, and dispose of small trash items.",
+    tags: ["Arduino", "C++"],
+    links: [{icon: "fab fa-github", label: "Source", url: "#"}],
+    images: ["assets/Images/trash-robot.jpeg"],
+  },
+  {
+    caseNo: "002",
+    icon: "fa-skull",
+    title: "The Gallows",
+    description:
+      "A film-noir detective-themed hangman game built with vanilla JS, featuring a custom Web Audio sound engine, difficulty/category selection, and a live scoring system — no frameworks, no libraries.",
+    tags: ["JavaScript"],
+    links: [
+      {
+        icon: "fab fa-github",
+        label: "Source",
+        url: "https://github.com/HabilBoyyyyyy/Hangman_game",
+      },
+    ],
+    images: ["assets/Images/Hangman_SS.png", "assets/images/Hangman_SS(1).png"],
+  },
+  {
+    caseNo: "003",
+    icon: "fa-brain",
+    title: "News Summarization & NER",
+    description:
+      "Fine-tuned transformer models (DistilBART, DistilBERT, T5, RoBERTa) for news summarization and Named Entity Recognition, reaching 97.7% accuracy on entity recognition.",
+    tags: ["Python", "NLP"],
+    links: [
+      {icon: "fab fa-github", label: "Source", url: "#"},
+      {icon: "fas fa-external-link-alt", label: "Demo", url: "#"},
+    ],
+    images: [],
+  },
+  {
+    caseNo: "004",
+    icon: "fa-building",
+    title: "Presdorm",
+    description:
+      "A dormitory management system prototype for President University, built with PHP, JavaScript, and MySQL. Led frontend development, attracting interest from the Dormitory Director.",
+    tags: ["PHP", "MySQL"],
+    links: [
+      {
+        icon: "fab fa-github",
+        label: "Source",
+        url: "https://github.com/Thoriqzulatsari/presdorm-update",
+      },
+    ],
+    images: [],
+  },
+  {
+    caseNo: "005",
+    icon: "fa-palette",
+    title: "TechSprint Case Study",
+    description:
+      "Developed the UI/UX Design track case study and judging rubric for TechSprint, a multi-track competition under PUMA IS with 8 competing teams.",
+    tags: ["UI/UX", "Case Study"],
+    links: [
+      {
+        icon: "fas fa-external-link-alt",
+        label: "Document",
+        url: "https://docs.google.com/document/d/1h4S9jVMmSjjNXds7NpR170MXFPavk2YLTFNVXsalHcU/edit?usp=sharing",
+      },
+    ],
+    images: [],
+  },
+];
+
+const CAROUSEL_INTERVAL = 4000;
+const caseGridEl = document.getElementById("caseGrid");
+
+function buildCardMedia(proj) {
+  const images = proj.images && proj.images.length ? proj.images : null;
+  const slideCount = images ? images.length : 1;
+
+  const slidesHtml = images
+    ? images
+        .map(
+          (src, i) => `
+          <div class="case-card-slide${i === 0 ? " active" : ""}">
+            <img src="${src}" alt="${proj.title} screenshot ${i + 1}" loading="lazy" />
+          </div>`,
+        )
+        .join("")
+    : `
+      <div class="case-card-slide active">
+        <div class="case-card-placeholder">
+          <i class="fas ${proj.icon}"></i>
+          <span>No preview available</span>
+        </div>
+      </div>`;
+
+  const controlsHtml =
+    slideCount > 1
+      ? `
+      <button class="case-card-arrow prev" aria-label="Previous image">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="case-card-arrow next" aria-label="Next image">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div class="case-card-dots">
+        ${Array.from({length: slideCount})
+          .map(
+            (_, i) =>
+              `<span class="case-card-dot${i === 0 ? " active" : ""}" data-index="${i}"></span>`,
+          )
+          .join("")}
+      </div>`
+      : "";
+
+  return `
+    <div class="case-card-media" data-slide-count="${slideCount}">
+      <div class="case-card-track">${slidesHtml}</div>
+      ${controlsHtml}
+      <span class="case-card-no">No. ${proj.caseNo}</span>
+    </div>`;
+}
+
+function buildCardBody(proj) {
+  const tagsHtml = proj.tags
+    .map((tag) => `<span class="project-tag">${tag}</span>`)
+    .join("");
+  const linksHtml = proj.links
+    .map(
+      (link) => `
+      <a href="${link.url}" target="_blank" class="case-card-link">
+        <i class="${link.icon}"></i> ${link.label}
+      </a>`,
+    )
+    .join("");
+
+  return `
+    <div class="case-card-body">
+      <div class="case-card-tags">${tagsHtml}</div>
+      <h3 class="case-card-title">${proj.title}</h3>
+      <p class="case-card-desc">${proj.description}</p>
+      <div class="case-card-links">${linksHtml}</div>
+    </div>`;
+}
+
+const TILT_ANGLES = [-2.2, 1.6, -1.4, 2, -1.8, 1.2]; // degrees, cycles per card
+
+function renderCaseGrid() {
+  if (!caseGridEl) return;
+
+  caseGridEl.innerHTML = projectsData
+    .map((proj, i) => {
+      const tilt = TILT_ANGLES[i % TILT_ANGLES.length];
+      return `
+      <article class="case-card" style="--tilt: ${tilt}deg">
+        <div class="case-card-pin"></div>
+        ${buildCardMedia(proj)}
+        ${buildCardBody(proj)}
+        <div class="case-card-wall-shadow"></div>
+      </article>`;
+    })
+    .join("");
+
+  caseGridEl.querySelectorAll(".case-card").forEach((card, i) => {
+    initCardCarousel(card, projectsData[i]);
   });
-  card.addEventListener("mouseleave", () => {
-    card.style.transform =
-      "perspective(1000px) rotateX(0) rotateY(0) translateY(0)";
-    card.style.transition = "transform 0.5s ease";
+}
+
+function initCardCarousel(card, proj) {
+  const media = card.querySelector(".case-card-media");
+  const slideCount = parseInt(media.getAttribute("data-slide-count"), 10);
+  if (slideCount <= 1) return; // static image or placeholder, nothing to animate
+
+  const track = media.querySelector(".case-card-track");
+  const dots = media.querySelectorAll(".case-card-dot");
+  const prevBtn = media.querySelector(".case-card-arrow.prev");
+  const nextBtn = media.querySelector(".case-card-arrow.next");
+
+  let activeIndex = 0;
+  let timer = null;
+
+  function goToSlide(index) {
+    const slides = track.querySelectorAll(".case-card-slide");
+    if (!slides.length) return;
+
+    const prevIndex = activeIndex;
+    activeIndex = (index + slides.length) % slides.length;
+    if (prevIndex === activeIndex) return;
+
+    const outgoing = slides[prevIndex];
+    const incoming = slides[activeIndex];
+    const goingForward =
+      index > prevIndex ||
+      (prevIndex === slides.length - 1 && activeIndex === 0);
+
+    incoming.style.transform = goingForward
+      ? "translateX(100%)"
+      : "translateX(-100%)";
+    incoming.style.opacity = "0";
+    incoming.style.transition = "none";
+    incoming.classList.add("active");
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        incoming.style.transition =
+          "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease";
+        incoming.style.transform = "translateX(0%)";
+        incoming.style.opacity = "1";
+
+        outgoing.style.transition =
+          "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease";
+        outgoing.style.transform = goingForward
+          ? "translateX(-100%)"
+          : "translateX(100%)";
+        outgoing.style.opacity = "0";
+      });
+    });
+
+    setTimeout(() => {
+      outgoing.classList.remove("active");
+      outgoing.style.transform = "";
+      outgoing.style.opacity = "";
+      outgoing.style.transition = "";
+    }, 520);
+
+    dots.forEach((dot, i) => dot.classList.toggle("active", i === activeIndex));
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    timer = setInterval(() => goToSlide(activeIndex + 1), CAROUSEL_INTERVAL);
+  }
+
+  function stopAutoplay() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      stopAutoplay();
+      goToSlide(parseInt(dot.getAttribute("data-index"), 10));
+      startAutoplay();
+    });
   });
-  card.addEventListener("mouseenter", () => {
-    card.style.transition = "none";
-  });
-});
+
+  if (prevBtn)
+    prevBtn.addEventListener("click", () => {
+      stopAutoplay();
+      goToSlide(activeIndex - 1);
+      startAutoplay();
+    });
+
+  if (nextBtn)
+    nextBtn.addEventListener("click", () => {
+      stopAutoplay();
+      goToSlide(activeIndex + 1);
+      startAutoplay();
+    });
+
+  media.addEventListener("mouseenter", stopAutoplay);
+  media.addEventListener("mouseleave", startAutoplay);
+
+  // Pause autoplay while the card is scrolled off-screen (saves battery/CPU)
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) startAutoplay();
+        else stopAutoplay();
+      });
+    },
+    {threshold: 0.2},
+  );
+  visibilityObserver.observe(media);
+}
+
+renderCaseGrid();
 
 // ===== ACTIVE NAV LINK HIGHLIGHT =====
 const sections = document.querySelectorAll("section[id]");

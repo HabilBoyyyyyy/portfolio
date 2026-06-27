@@ -1358,172 +1358,295 @@ section {
   background-color: #007acc;
 } /* VS Code */
 
-/* ===== PROJECTS ===== */
-.projects-grid {
+/* ===== PROJECTS — CASE FILES ===== */
+.case-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.6rem 2.2rem;
+  padding-top: 0.6rem;
 }
 
-.project-card {
-  background: var(--parchment-light);
-  border-radius: 20px;
-  padding: 5px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(20, 12, 0, 0.1);
-  transition: transform var(--transition-smooth);
+/* --- Card --- */
+.case-card {
   position: relative;
-  border: 1px solid var(--paper-border);
-}
-
-.project-card:hover {
-  transform: scale(1.03);
-}
-
-.project-card .top-section {
-  height: 170px;
-  border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(45deg, var(--crimson) 0%, var(--brass) 100%);
-  position: relative;
-  overflow: hidden;
+  background: #faf8f2;
+  border-radius: 3px;
+  padding: 14px 14px 0 14px;
+  box-shadow:
+    0 1px 1px rgba(20, 12, 0, 0.08),
+    0 2px 4px rgba(20, 12, 0, 0.06),
+    0 4px 8px rgba(20, 12, 0, 0.05);
+  transform: rotate(var(--tilt, 0deg));
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s ease;
 }
 
-.project-card .top-section .border {
-  border-bottom-right-radius: 10px;
-  height: 30px;
-  width: 130px;
-  background: var(--parchment-light);
-  position: relative;
-  z-index: 2;
-  transform: skew(-40deg);
-  box-shadow: -10px -10px 0 0 var(--parchment-light);
+.case-card:hover {
+  transform: rotate(calc(var(--tilt, 0deg) * 0.15)) translateY(-8px)
+    scale(1.015);
+  box-shadow:
+    0 2px 3px rgba(20, 12, 0, 0.1),
+    0 10px 24px rgba(20, 12, 0, 0.14),
+    0 20px 48px rgba(20, 12, 0, 0.1);
+  z-index: 5;
 }
 
-.project-card .top-section .border::before {
+/* Subtle paper sheen + aged right edge, same technique as .photo-paper */
+.case-card::before {
   content: "";
   position: absolute;
-  width: 15px;
-  height: 15px;
-  top: 0;
-  right: -15px;
-  border-top-left-radius: 10px;
-  box-shadow: -5px -5px 0 2px var(--parchment-light);
+  inset: 0;
+  border-radius: 3px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
-.project-card .top-section::before {
+.case-card::after {
   content: "";
   position: absolute;
-  top: 30px;
-  left: 0;
-  height: 15px;
-  width: 15px;
-  border-top-left-radius: 15px;
-  box-shadow: -5px -5px 0 2px var(--parchment-light);
-  z-index: 2;
-}
-
-.project-card .icons {
-  position: absolute;
   top: 0;
-  width: 100%;
-  height: 30px;
-  display: flex;
-  justify-content: space-between;
-  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.04), transparent);
+  border-radius: 0 3px 3px 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.project-card .icons .logo {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-  font-size: 1rem;
-  color: var(--parchment-light);
-}
-
-.project-card .icons .social-media {
-  height: 100%;
-  padding: 0 15px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.project-card .icons .social-media a {
-  color: var(--parchment-light);
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.project-card .icons .social-media a:hover {
-  color: #fff;
-}
-
-.top-section:has(.project-img) .social-media a,
-.top-section:has(.project-img) .logo {
-  color: #fff;
-  background: rgba(0, 0, 0, 0.4);
+/* --- The pushpin (same technique as .photo-pin) --- */
+.case-card-pin {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  background: radial-gradient(circle at 35% 35%, #d44040, #8b1a1a 60%, #5a1010);
+  box-shadow:
+    0 2px 4px rgba(20, 12, 0, 0.4),
+    0 4px 8px rgba(20, 12, 0, 0.2),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.case-card-pin::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  width: 5px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.case-card-pin::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 3px;
+  background: rgba(20, 12, 0, 0.15);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+/* --- Shadow cast on the wall behind the paper --- */
+.case-card-wall-shadow {
+  position: absolute;
+  bottom: -6px;
+  left: 10%;
+  right: 10%;
+  height: 18px;
+  background: rgba(20, 12, 0, 0.1);
+  border-radius: 50%;
+  filter: blur(10px);
+  z-index: -1;
+  transition: all 0.5s ease;
+}
+
+.case-card:hover .case-card-wall-shadow {
+  bottom: -14px;
+  filter: blur(16px);
+  opacity: 0.75;
+}
+
+/* --- Media area: carousel / single image / placeholder ---
+   Images are never cropped — object-fit: contain inside a height-capped
+   box means any image size or aspect ratio displays fully and correctly. */
+.case-card-media {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border: 1px solid rgba(20, 12, 0, 0.08);
+  border-radius: 2px;
+  background: linear-gradient(145deg, #211a10, #2c2316);
+  overflow: hidden;
+}
+
+.case-card-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.case-card-slide {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transform: translateX(100%);
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.5s ease;
+  pointer-events: none;
 }
 
-.top-section:has(.project-img) .social-media a:hover {
-  color: var(--parchment-light);
-  background: rgba(0, 0, 0, 0.6);
+.case-card-slide.active {
+  opacity: 1;
+  transform: translateX(0%);
+  pointer-events: auto;
 }
 
-.project-card .image-placeholder {
-  flex: 1;
-  margin: 34px 10px 8px;
+.case-card-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: sepia(0.08) saturate(0.97);
+}
+
+.case-card-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
+  gap: 0.6rem;
+  width: 100%;
+  height: 100%;
   color: rgba(255, 255, 255, 0.75);
 }
 
-.project-card .image-placeholder i {
-  font-size: 1.6rem;
+.case-card-placeholder i {
+  font-size: 2rem;
 }
 
-.project-card .image-placeholder span {
+.case-card-placeholder span {
   font-size: 0.7rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.project-card .bottom-section {
-  margin-top: 12px;
-  padding: 8px 10px 12px;
+.case-card-no {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(20, 12, 0, 0.55);
+  color: var(--brass-glow);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  border-radius: 4px;
+  z-index: 3;
+  pointer-events: none;
 }
 
-.project-card .bottom-section .title {
-  display: block;
-  font-family: var(--font-title);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: 0.5px;
-  margin-bottom: 0.6rem;
+.case-card-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(26, 18, 8, 0.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 4;
+  font-size: 0.8rem;
+  transition: all var(--transition-fast);
 }
 
-.project-card .bottom-section .description {
-  display: block;
-  color: var(--ink-faded);
-  font-size: 0.82rem;
-  margin-bottom: 1rem;
+.case-card-media:hover .case-card-arrow {
+  opacity: 1;
 }
 
-.project-card .tags-row {
+.case-card-arrow.prev {
+  left: 10px;
+}
+
+.case-card-arrow.next {
+  right: 10px;
+}
+
+.case-card-arrow:hover {
+  background: var(--crimson);
+}
+
+.case-card-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 4;
+}
+
+.case-card-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.case-card-dot.active {
+  background: #fff;
+  width: 16px;
+  border-radius: 3px;
+}
+
+/* --- Card body: tags / title / description / links --- */
+.case-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1rem 0 1.3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.case-card-tags {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-bottom: 0.7rem;
 }
 
 .project-tag {
@@ -1536,13 +1659,47 @@ section {
   font-family: var(--font-mono);
 }
 
-.project-card .project-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
+.case-card-title {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin-bottom: 0.6rem;
+}
+
+.case-card-desc {
+  flex: 1;
+  color: var(--ink-faded);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+
+.case-card-links {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.case-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  background: rgba(26, 18, 8, 0.04);
+  border: 1px solid var(--paper-border-strong);
+  border-radius: 50px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.case-card-link:hover {
+  background: rgba(139, 26, 26, 0.08);
+  border-color: var(--crimson);
+  color: var(--crimson);
+  transform: translateY(-2px);
 }
 
 /* ===== EXPERIENCE ===== */
@@ -2290,6 +2447,15 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .case-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.2rem;
+  }
+
+  .case-card-arrow {
+    opacity: 1; /* always visible on touch screens */
+  }
+
   .timeline::before {
     left: 20px;
   }
@@ -2341,10 +2507,6 @@ footer {
     font-size: 1.8rem;
   }
 
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -2361,6 +2523,31 @@ footer {
   .scroll-icon-hand {
     display: block;
     animation: scroll-hand-slide 1.6s ease-in-out infinite;
+  }
+
+  .case-grid {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+
+  .case-card-media {
+    height: 210px;
+  }
+
+  .case-card-arrow {
+    opacity: 1; /* always visible on touch screens */
+  }
+
+  .case-card-body {
+    padding-bottom: 1.1rem;
+  }
+
+  .case-card-title {
+    font-size: 1.1rem;
+  }
+
+  .case-card-desc {
+    font-size: 0.88rem;
   }
 }
 
@@ -2380,6 +2567,10 @@ footer {
 
   .skills-grid {
     grid-template-columns: 1fr;
+  }
+
+  .case-card-media {
+    height: 185px;
   }
 }
 
