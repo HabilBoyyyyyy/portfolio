@@ -295,7 +295,7 @@ const projectsData = [
         url: "https://github.com/HabilBoyyyyyy/Hangman_game",
       },
     ],
-    images: ["assets/Images/Hangman_SS.png", "assets/images/Hangman_SS(1).png"],
+    images: ["assets/Images/Hangman_SS.png", "assets/Images/Hangman_SS(1).png"],
   },
   {
     caseNo: "003",
