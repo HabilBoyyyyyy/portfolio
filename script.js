@@ -73,6 +73,149 @@ function animateParticles() {
 }
 animateParticles();
 
+// ===== ABOUT PHOTO — 3D TILT / GLOW / SHEEN =====
+function initTiltCard(rootEl, surfaceEl) {
+  if (!rootEl || !surfaceEl) return;
+
+  const DEFAULT_TAU = 0.14;
+  const INITIAL_TAU = 0.6;
+  const INITIAL_DURATION = 1200;
+
+  let rafId = null;
+  let running = false;
+  let lastTs = 0;
+  let currentX = 0,
+    currentY = 0;
+  let targetX = 0,
+    targetY = 0;
+  let initialUntil = 0;
+  let leaveRafId = null;
+
+  const clamp = (v, min = 0, max = 100) => Math.min(Math.max(v, min), max);
+  const round = (v, p = 3) => parseFloat(v.toFixed(p));
+  const adjust = (v, fMin, fMax, tMin, tMax) =>
+    round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
+
+  function setVarsFromXY(x, y) {
+    const width = surfaceEl.clientWidth || 1;
+    const height = surfaceEl.clientHeight || 1;
+
+    const percentX = clamp((100 / width) * x);
+    const percentY = clamp((100 / height) * y);
+
+    const centerX = percentX - 50;
+    const centerY = percentY - 50;
+
+    const vars = {
+      "--pointer-x": `${percentX}%`,
+      "--pointer-y": `${percentY}%`,
+      "--background-x": `${adjust(percentX, 0, 100, 35, 65)}%`,
+      "--background-y": `${adjust(percentY, 0, 100, 35, 65)}%`,
+      "--pointer-from-center": `${clamp(Math.hypot(percentY - 50, percentX - 50) / 50, 0, 1)}`,
+      "--pointer-from-top": `${percentY / 100}`,
+      "--pointer-from-left": `${percentX / 100}`,
+      "--rotate-x": `${round(-(centerX / 9))}deg`,
+      "--rotate-y": `${round(centerY / 7)}deg`,
+    };
+    for (const [k, v] of Object.entries(vars)) rootEl.style.setProperty(k, v);
+  }
+
+  function step(ts) {
+    if (!running) return;
+    if (lastTs === 0) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+
+    const tau = ts < initialUntil ? INITIAL_TAU : DEFAULT_TAU;
+    const k = 1 - Math.exp(-dt / tau);
+
+    currentX += (targetX - currentX) * k;
+    currentY += (targetY - currentY) * k;
+    setVarsFromXY(currentX, currentY);
+
+    const stillFar =
+      Math.abs(targetX - currentX) > 0.05 ||
+      Math.abs(targetY - currentY) > 0.05;
+    if (stillFar) {
+      rafId = requestAnimationFrame(step);
+    } else {
+      running = false;
+      lastTs = 0;
+    }
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    lastTs = 0;
+    rafId = requestAnimationFrame(step);
+  }
+
+  function setTarget(x, y) {
+    targetX = x;
+    targetY = y;
+    start();
+  }
+
+  function toCenter() {
+    setTarget(surfaceEl.clientWidth / 2, surfaceEl.clientHeight / 2);
+  }
+
+  function getOffsets(evt) {
+    const rect = surfaceEl.getBoundingClientRect();
+    return {x: evt.clientX - rect.left, y: evt.clientY - rect.top};
+  }
+
+  surfaceEl.addEventListener("pointerenter", (e) => {
+    if (e.pointerType === "touch") return; // skip continuous tilt on touch
+    rootEl.classList.add("active");
+    rootEl.classList.add("entering");
+    setTimeout(() => rootEl.classList.remove("entering"), 180);
+    const {x, y} = getOffsets(e);
+    currentX = x;
+    currentY = y;
+    setVarsFromXY(x, y);
+    setTarget(x, y);
+  });
+
+  surfaceEl.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "touch") return;
+    const {x, y} = getOffsets(e);
+    setTarget(x, y);
+  });
+
+  surfaceEl.addEventListener("pointerleave", (e) => {
+    if (e.pointerType === "touch") return;
+    toCenter();
+    if (leaveRafId) cancelAnimationFrame(leaveRafId);
+    const checkSettle = () => {
+      const settled = Math.hypot(targetX - currentX, targetY - currentY) < 0.6;
+      if (settled) {
+        rootEl.classList.remove("active");
+        leaveRafId = null;
+      } else {
+        leaveRafId = requestAnimationFrame(checkSettle);
+      }
+    };
+    leaveRafId = requestAnimationFrame(checkSettle);
+  });
+
+  // Gentle entrance animation on page load
+  const initialX = (surfaceEl.clientWidth || 0) - 70;
+  const initialY = 60;
+  currentX = initialX;
+  currentY = initialY;
+  setVarsFromXY(currentX, currentY);
+  toCenter();
+  initialUntil = performance.now() + INITIAL_DURATION;
+  start();
+}
+
+initTiltCard(
+  document.getElementById("pinnedPhoto"),
+  document.getElementById("pinnedPhotoShell"),
+);
+
 // ===== NAVIGATION =====
 const navbar = document.getElementById("navbar");
 const hamburger = document.getElementById("hamburger");

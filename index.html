@@ -150,20 +150,39 @@
         </div>
         <div class="about-grid">
           <div class="about-image reveal-left">
-            <div class="pinned-photo">
-              <!-- The pin -->
+            <div class="pinned-photo" id="pinnedPhoto">
+              <!-- Behind glow -->
+              <div class="photo-glow"></div>
+              <!-- The pushpin -->
               <div class="photo-pin"></div>
-              <!-- Photo paper frame -->
-              <div class="photo-paper">
+              <!-- Card shell (tilt surface) -->
+              <div class="photo-paper" id="pinnedPhotoShell">
+                <!-- Photo fills the card -->
                 <div class="photo-frame">
                   <img
-                    src="assets/Images/Profile.jpeg"
+                    src="assets/Images/Profile.png"
                     alt="Habil Baihaki"
                     class="photo-img" />
                 </div>
-                <p class="photo-caption">~ Habil Baihaki ~</p>
+                <!-- Holographic shine -->
+                <div class="photo-shine"></div>
+                <!-- Pointer glare -->
+                <div class="photo-glare"></div>
+                <!-- Name / title overlay -->
+                <div class="photo-details">
+                  <h4>Habil Baihaki</h4>
+                  <p>Informatics Student</p>
+                </div>
+                <!-- Glass user-info bar -->
+                <div class="photo-caption">
+                  <div class="photo-caption-left">
+                    <span class="photo-caption-handle">@habilboy</span>
+                    <span class="photo-caption-status">Open to work</span>
+                  </div>
+                  <a href="#contact" class="photo-caption-btn">Contact</a>
+                </div>
               </div>
-              <!-- Paper shadow on the wall -->
+              <!-- Wall shadow -->
               <div class="photo-wall-shadow"></div>
             </div>
           </div>
@@ -706,9 +725,9 @@
           <div class="contact-info reveal-left">
             <h3>Let's work <span>together</span></h3>
             <p>
-              Whether you're looking for a developer for your next project, need
-              a freelance web developer, or just want to connect — I'm always
-              open to new opportunities and conversations.
+              Whether you're looking for a hiring or need an intern, or just
+              want to connect, I'm always open to new opportunities and
+              conversations.
             </p>
             <div class="contact-details">
               <div class="contact-item">
