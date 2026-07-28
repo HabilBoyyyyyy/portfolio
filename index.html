@@ -28,26 +28,96 @@
 
     <!-- NAVIGATION -->
     <nav id="navbar">
+      <!-- Left Logo -->
       <a href="#hero" class="nav-logo">
         <img src="assets/Images/LOgo.png" alt="Logo" class="nav-logo-img" />
       </a>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#techstack">Tech Stack</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li>
-          <a href="#contact" class="nav-cta"
-            ><span class="shadow-nav-cta"></span>
-            <span class="edge-nav-cta"></span>
-            <span class="front-nav-cta text"> Let's talk</span></a
-          >
-        </li>
-      </ul>
-      <button class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
-      </button>
+
+      <!-- Middle pill tabs -->
+      <div class="wrap nav-links">
+        <input
+          checked=""
+          type="radio"
+          id="rd-1"
+          name="radio"
+          class="rd-1"
+          hidden="" />
+        <label
+          for="rd-1"
+          class="label"
+          style="--index: 0"
+          onclick="
+            document.querySelector('#hero').scrollIntoView({behavior: 'smooth'})
+          "
+          ><span>Home</span></label
+        >
+
+        <input type="radio" id="rd-2" name="radio" class="rd-2" hidden="" />
+        <label
+          for="rd-2"
+          class="label"
+          style="--index: 1"
+          onclick="
+            document
+              .querySelector('#about')
+              .scrollIntoView({behavior: 'smooth'})
+          "
+          ><span>About</span></label
+        >
+
+        <input type="radio" id="rd-3" name="radio" class="rd-3" hidden="" />
+        <label
+          for="rd-3"
+          class="label"
+          style="--index: 2"
+          onclick="
+            document
+              .querySelector('#projects')
+              .scrollIntoView({behavior: 'smooth'})
+          "
+          ><span>Projects</span></label
+        >
+
+        <!--<input type="radio" id="rd-4" name="radio" class="rd-4" hidden="" />
+        <label
+          for="rd-4"
+          class="label"
+          style="--index: 3"
+          onclick="
+            document
+              .querySelector('#experience')
+              .scrollIntoView({behavior: 'smooth'})
+          "
+          ><span>Experience</span></label
+        > -->
+
+        <input type="radio" id="rd-5" name="radio" class="rd-5" hidden="" />
+        <label
+          for="rd-5"
+          class="label"
+          style="--index: 4"
+          onclick="
+            document
+              .querySelector('#contact')
+              .scrollIntoView({behavior: 'smooth'})
+          "
+          ><span>Contact</span></label
+        >
+      </div>
+
+      <!-- Right Section -->
+      <div class="nav-right">
+        <!-- Resume / CTA -->
+        <a href="assets/resume.pdf" class="nav-cta" download
+          ><span class="shadow-nav-cta"></span>
+          <span class="edge-nav-cta"></span>
+          <span class="front-nav-cta text"> Download Resume</span></a
+        >
+
+        <button class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </nav>
 
     <!-- MOBILE MENU -->
@@ -56,7 +126,7 @@
       <a href="#skills" class="mobile-link">Skills</a>
       <a href="#techstack" class="mobile-link">Tech Stack</a>
       <a href="#projects" class="mobile-link">Projects</a>
-      <a href="#experience" class="mobile-link">Experience</a>
+      <!-- <a href="#experience" class="mobile-link">Experience</a> -->
       <a href="#education" class="mobile-link">Education</a>
       <a href="#certificates" class="mobile-link">Certificates</a>
       <a href="#timeline" class="mobile-link">Timeline</a>
@@ -418,6 +488,11 @@
         </div>
         <!-- Cards are rendered entirely by script.js from projectsData -->
         <div class="case-grid reveal" id="caseGrid"></div>
+        <div class="show-more-wrap reveal" id="showMoreWrap">
+          <button class="btn-show-more" id="btnShowMore">
+            <i class="fas fa-chevron-down"></i> Show All Projects
+          </button>
+        </div>
       </div>
     </section>
 

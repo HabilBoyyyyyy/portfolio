@@ -429,7 +429,7 @@ const projectsData = [
     icon: "fa-skull",
     title: "The Gallows",
     description:
-      "A film-noir detective-themed hangman game built with vanilla JS, featuring a custom Web Audio sound engine, difficulty/category selection, and a live scoring system — no frameworks, no libraries.",
+      "A film-noir detective-themed hangman game built with vanilla JS, featuring a custom Web Audio sound engine, difficulty/category selection, and a live scoring system, no frameworks, no libraries.",
     tags: ["JavaScript"],
     links: [
       {
@@ -561,6 +561,7 @@ function buildCardBody(proj) {
 }
 
 const TILT_ANGLES = [-2.2, 1.6, -1.4, 2, -1.8, 1.2]; // degrees, cycles per card
+const VISIBLE_COUNT = 3; // show only first 3 by default
 
 function renderCaseGrid() {
   if (!caseGridEl) return;
@@ -568,8 +569,9 @@ function renderCaseGrid() {
   caseGridEl.innerHTML = projectsData
     .map((proj, i) => {
       const tilt = TILT_ANGLES[i % TILT_ANGLES.length];
+      const hiddenClass = i >= VISIBLE_COUNT ? " hidden-card" : "";
       return `
-      <article class="case-card" style="--tilt: ${tilt}deg">
+      <article class="case-card${hiddenClass}" style="--tilt: ${tilt}deg">
         <div class="case-card-pin"></div>
         ${buildCardMedia(proj)}
         ${buildCardBody(proj)}
@@ -581,6 +583,25 @@ function renderCaseGrid() {
   caseGridEl.querySelectorAll(".case-card").forEach((card, i) => {
     initCardCarousel(card, projectsData[i]);
   });
+
+  // Show More button logic
+  const showMoreWrap = document.getElementById("showMoreWrap");
+  const btnShowMore = document.getElementById("btnShowMore");
+
+  if (projectsData.length <= VISIBLE_COUNT) {
+    // Hide button if 3 or fewer projects
+    if (showMoreWrap) showMoreWrap.classList.add("hidden");
+  } else if (btnShowMore) {
+    let expanded = false;
+    btnShowMore.addEventListener("click", () => {
+      expanded = !expanded;
+      caseGridEl.classList.toggle("show-all", expanded);
+      btnShowMore.classList.toggle("expanded", expanded);
+      btnShowMore.innerHTML = expanded
+        ? '<i class="fas fa-chevron-up"></i> Show Less'
+        : '<i class="fas fa-chevron-down"></i> Show All Projects';
+    });
+  }
 }
 
 function initCardCarousel(card, proj) {
@@ -705,10 +726,17 @@ window.addEventListener("scroll", () => {
       current = section.getAttribute("id");
     }
   });
-  document.querySelectorAll(".nav-links a").forEach((link) => {
-    link.style.color = "";
-    if (link.getAttribute("href") === "#" + current) {
-      link.style.color = "var(--accent-cyan)";
+  const idMap = {
+    "hero": "rd-1",
+    "about": "rd-2",
+    "projects": "rd-3",
+    "experience": "rd-4",
+    "contact": "rd-5"
+  };
+  if (idMap[current]) {
+    const radio = document.getElementById(idMap[current]);
+    if (radio && !radio.checked) {
+      radio.checked = true;
     }
-  });
+  }
 });
