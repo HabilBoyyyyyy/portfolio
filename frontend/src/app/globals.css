@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme static {
+  /* Base */
+  --color-ivory: #faf6f0;
+  --color-ink: #201c1a;
+
+  /* Terracotta scale (base = 600) */
+  --color-terracotta-50: #fcf6f5;
+  --color-terracotta-100: #f8eae6;
+  --color-terracotta-200: #efd2c9;
+  --color-terracotta-300: #e5b6a7;
+  --color-terracotta-400: #d9927d;
+  --color-terracotta-500: #cc7054;
+  --color-terracotta-600: #c1502e;
+  --color-terracotta-700: #9e4226;
+  --color-terracotta-800: #7f351e;
+  --color-terracotta-900: #602817;
+
+  /* Deep green scale (base = 600) */
+  --color-green-50: #f5f6f5;
+  --color-green-100: #e6eae7;
+  --color-green-200: #c9d2ca;
+  --color-green-300: #a8b6a9;
+  --color-green-400: #7e9481;
+  --color-green-500: #547158;
+  --color-green-600: #2f5233;
+  --color-green-700: #27432a;
+  --color-green-800: #1f3622;
+  --color-green-900: #18291a;
+
+  /* Neutral scale, ivory to ink (named "sand" so it doesn't clash with Tailwind's built-in neutral) */
+  --color-sand-0: #faf6f0;
+  --color-sand-50: #efebe5;
+  --color-sand-100: #e4e0db;
+  --color-sand-200: #cecac5;
+  --color-sand-300: #b9b5b0;
+  --color-sand-400: #a39f9a;
+  --color-sand-500: #8d8985;
+  --color-sand-600: #777370;
+  --color-sand-700: #615d5a;
+  --color-sand-800: #4c4845;
+  --color-sand-900: #36322f;
+  --color-sand-1000: #201c1a;
+
+  /* Semantic */
+  --color-success: #2f5233;
+  --color-warning: #c98a2c;
+  --color-error: #b33a2e;
+  --color-info: #4a6a78;
+}
+
+/* Fonts are wired to the CSS variables that next/font creates in layout.tsx */
+@theme inline {
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-dm-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ivory);
+  background-image: radial-gradient(
+    rgba(32, 28, 26, 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  color: var(--color-ink);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: scale(2.2) rotate(-18deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.94) rotate(-8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-8deg);
+  }
+}
+
+.stamp-in {
+  animation: stamp 450ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp-in {
+    animation: none;
+  }
+}

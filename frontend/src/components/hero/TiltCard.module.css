@@ -1,0 +1,302 @@
+/* ---------- Entrance: the card swings in like it was just pinned up ---------- */
+.entrance {
+  transform-origin: 50% 0;
+  animation: hang 1000ms ease-out both;
+}
+
+@keyframes hang {
+  0% {
+    opacity: 0;
+    transform: translateY(-48px) rotate(-5deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6px) rotate(1.2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* ---------- Stage: sets the 3D space and receives pointer events ---------- */
+.stage {
+  position: relative;
+  width: min(430px, 86vw);
+  margin-inline: auto;
+  perspective: 1100px;
+  touch-action: pan-y; /* vertical swipes still scroll the page; sideways drags tilt */
+}
+
+@media (max-width: 640px) {
+  .stage {
+    width: min(340px, 80vw);
+  }
+}
+
+/* ---------- Layer 1: glow ---------- */
+.glow {
+  position: absolute;
+  inset: -12% -14%;
+  z-index: 0;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-terracotta-500) 55%, transparent),
+    transparent 72%
+  );
+  filter: blur(28px);
+  opacity: calc(0.55 + var(--dist, 0) * 0.35);
+  transform: translate3d(
+    calc(var(--ry, 0) * -1.5px),
+    calc(var(--rx, 0) * 1.5px),
+    0
+  );
+}
+
+/* ---------- Layer 2: wall shadow ---------- */
+.wallShadow {
+  position: absolute;
+  inset: 4% 3% -3% 3%;
+  z-index: 1;
+  border-radius: 28px;
+  background: rgb(32 28 26 / 0.55);
+  filter: blur(26px);
+  opacity: calc(0.3 + var(--dist, 0) * 0.1);
+  /* The shadow slides toward whichever edge is lifting off the wall */
+  transform: translate3d(
+    calc(14px - var(--ry, 0) * 1.2px),
+    calc(26px + var(--rx, 0) * 1.2px),
+    0
+  );
+}
+
+/* ---------- Layer 3: card shell ---------- */
+.card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 430 / 599;
+  border-radius: 22px;
+  overflow: hidden;
+  isolation: isolate; /* keeps blend modes inside the card */
+  container-type: inline-size; /* lets children size text with cqw (1cqw = 1% of card width) */
+  transform-origin: 50% 4.5%; /* pivot at the pin */
+  transform: rotateX(calc(var(--rx, 0) * 1deg))
+    rotateY(calc(var(--ry, 0) * 1deg));
+  background: var(--color-sand-50);
+  box-shadow: 0 0 0 1px rgb(32 28 26 / 0.08);
+  will-change: transform;
+}
+
+/* ---------- Sub-layer A: photo ---------- */
+.photoWrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    160deg,
+    var(--color-terracotta-300),
+    var(--color-terracotta-700)
+  );
+}
+
+/* Darkens the bottom so the name stays readable */
+.photoWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(32 28 26 / 0.78) 0%,
+    rgb(32 28 26 / 0) 58%
+  );
+}
+
+.photo {
+  object-fit: cover;
+  mix-blend-mode: luminosity; /* photo brightness + the terracotta backdrop's color */
+  transform: translate3d(calc(var(--tx, 0) * 1px), calc(var(--ty, 0) * 1px), 0)
+    scale(1.12);
+  will-change: transform;
+}
+
+/* ---------- Sub-layer B: name ---------- */
+.name {
+  position: absolute;
+  left: 7cqw;
+  right: 7cqw;
+  bottom: 29cqw;
+  z-index: 2;
+  font-family: var(--font-fraunces), serif;
+  line-height: 0.95;
+  filter: drop-shadow(0 2px 10px rgb(32 28 26 / 0.45));
+}
+
+.first,
+.rest {
+  display: block;
+  background: linear-gradient(
+    180deg,
+    var(--color-ivory) 25%,
+    var(--color-terracotta-200) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.first {
+  font-size: 17cqw;
+}
+.rest {
+  margin-top: 1.2cqw;
+  font-size: 6.4cqw;
+}
+
+/* ---------- Sub-layer C: glass info bar ---------- */
+.info {
+  position: absolute;
+  left: 3.7cqw;
+  right: 3.7cqw;
+  bottom: 3.7cqw;
+  z-index: 3;
+  display: grid;
+  gap: 1.6cqw;
+  padding: 3.4cqw 4cqw;
+  border-radius: 4cqw;
+  background: rgb(250 246 240 / 0.16);
+  border: 1px solid rgb(250 246 240 / 0.28);
+  backdrop-filter: blur(28px) saturate(1.3);
+  -webkit-backdrop-filter: blur(28px) saturate(1.3);
+  color: var(--color-ivory);
+}
+
+.role {
+  font-family: var(--font-plex-mono), monospace;
+  font-size: max(10px, 2.6cqw);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3cqw;
+}
+
+.location {
+  font-size: max(12px, 3.3cqw);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  font-size: max(11px, 3cqw);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 2.2cqw;
+  height: 2.2cqw;
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 50%;
+  background: #7bd389;
+  box-shadow: 0 0 0 0 rgb(123 211 137 / 0.6);
+  animation: ping 2s ease-out infinite;
+}
+
+@keyframes ping {
+  to {
+    box-shadow: 0 0 0 8px rgb(123 211 137 / 0);
+  }
+}
+
+/* ---------- Layer 4: holographic shine (3 stacked gradients, color-dodge) ---------- */
+.shine {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  opacity: calc(0.12 + var(--dist, 0) * 0.5);
+  background-image:
+    /* 1: soft bloom that follows the pointer */
+    radial-gradient(
+      circle at calc(var(--px, 50) * 1%) calc(var(--py, 50) * 1%),
+      rgb(255 255 255 / 0.55) 0%,
+      transparent 45%
+    ),
+    /* 2: diagonal prism bands in the site palette */
+    repeating-linear-gradient(
+        115deg,
+        var(--color-terracotta-300) 0%,
+        #f3d9a4 10%,
+        var(--color-green-300) 20%,
+        #bfd3d9 30%,
+        var(--color-terracotta-300) 40%
+      ),
+    /* 3: fine foil lines */
+    repeating-linear-gradient(
+        0deg,
+        rgb(255 255 255 / 0.1) 0 1px,
+        transparent 1px 3px
+      );
+  background-size:
+    100% 100%,
+    260% 260%,
+    100% 100%;
+  background-position:
+    0 0,
+    calc(var(--px, 50) * 1%) calc(var(--py, 50) * 1%),
+    0 0;
+}
+
+/* ---------- Layer 5: pointer glare ---------- */
+.glare {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: calc(var(--dist, 0) * 0.9);
+  background: radial-gradient(
+    farthest-corner circle at calc(var(--px, 50) * 1%) calc(var(--py, 50) * 1%),
+    rgb(255 255 255 / 0.85) 0%,
+    rgb(255 255 255 / 0.25) 30%,
+    transparent 62%
+  );
+}
+
+/* ---------- Layer 6: pushpin ---------- */
+.pin {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  z-index: 6;
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    var(--color-terracotta-300) 0%,
+    var(--color-terracotta-600) 45%,
+    var(--color-terracotta-800) 100%
+  );
+  box-shadow:
+    0 6px 10px -2px rgb(32 28 26 / 0.45),
+    inset 0 -2px 3px rgb(0 0 0 / 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrance {
+    animation: none;
+  }
+  .dot {
+    animation: none;
+  }
+}
