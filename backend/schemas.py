@@ -1,13 +1,16 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 
 class ProfileOut(BaseModel):
     name: str
+    role: Optional[str] = None
     tagline: Optional[str] = None
     bio: Optional[str] = None
     email: Optional[str] = None
     resume_url: Optional[str] = None
+    hero_image_url: Optional[str] = None
+    about_image_url: Optional[str] = None
     stat_projects: Optional[str] = None
     stat_years: Optional[str] = None
     stat_certs: Optional[str] = None
@@ -16,10 +19,13 @@ class ProfileOut(BaseModel):
 
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
+    role: Optional[str] = None
     tagline: Optional[str] = None
     bio: Optional[str] = None
     email: Optional[str] = None
     resume_url: Optional[str] = None
+    hero_image_url: Optional[str] = None
+    about_image_url: Optional[str] = None
     stat_projects: Optional[str] = None
     stat_years: Optional[str] = None
     stat_certs: Optional[str] = None
@@ -27,6 +33,7 @@ class ProfileUpdate(BaseModel):
 class SkillOut(BaseModel):
     id: int
     name: str
+    icon_url: Optional[str] = None
     category: Optional[str] = None
     progress: int
     description: Optional[str] = None
@@ -37,6 +44,7 @@ class SkillOut(BaseModel):
 
 class SkillCreate(BaseModel):
     name: str
+    icon_url: Optional[str] = None
     category: Optional[str] = None
     progress: int = 0
     description: Optional[str] = None
@@ -141,5 +149,5 @@ class SectionUpdate(BaseModel):
     visible: bool
 
 class ProjectImageCreate(BaseModel):
-    image_url: str
+    image_url: str = Field(..., min_length=1)
     order: int = 0

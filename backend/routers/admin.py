@@ -29,6 +29,10 @@ def update_profile(payload: schemas.ProfileUpdate, db: Session = Depends(get_db)
     return profile
 
 # --- Skills ---
+@router.get("/skills", response_model=list[schemas.SkillOut])
+def get_admin_skills(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    return db.query(models.Skill).order_by(models.Skill.order).all()
+
 @router.post("/skills", response_model=schemas.SkillOut)
 def create_skill(payload: schemas.SkillCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     skill = models.Skill(**payload.model_dump())
@@ -58,6 +62,10 @@ def delete_skill(skill_id: int, db: Session = Depends(get_db), admin: str = Depe
     return {"ok": True}
 
 # --- Projects ---
+@router.get("/projects", response_model=list[schemas.ProjectOut])
+def get_admin_projects(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    return db.query(models.Project).order_by(models.Project.order).all()
+
 @router.post("/projects", response_model=schemas.ProjectOut)
 def create_project(payload: schemas.ProjectCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     project = models.Project(**payload.model_dump())
@@ -95,6 +103,17 @@ def create_certificate(payload: schemas.CertificateCreate, db: Session = Depends
     db.refresh(cert)
     return cert
 
+@router.put("/certificates/{cert_id}", response_model=schemas.CertificateOut)
+def update_certificate(cert_id: int, payload: schemas.CertificateCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    cert = db.query(models.Certificate).filter(models.Certificate.id == cert_id).first()
+    if not cert:
+        raise HTTPException(404, "Certificate not found")
+    for field, value in payload.model_dump().items():
+        setattr(cert, field, value)
+    db.commit()
+    db.refresh(cert)
+    return cert
+
 @router.delete("/certificates/{cert_id}")
 def delete_certificate(cert_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     cert = db.query(models.Certificate).filter(models.Certificate.id == cert_id).first()
@@ -109,6 +128,17 @@ def delete_certificate(cert_id: int, db: Session = Depends(get_db), admin: str =
 def create_timeline_item(payload: schemas.TimelineItemCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     item = models.TimelineItem(**payload.model_dump())
     db.add(item)
+    db.commit()
+    db.refresh(item)
+    return item
+
+@router.put("/timeline/{item_id}", response_model=schemas.TimelineItemOut)
+def update_timeline_item(item_id: int, payload: schemas.TimelineItemCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    item = db.query(models.TimelineItem).filter(models.TimelineItem.id == item_id).first()
+    if not item:
+        raise HTTPException(404, "Timeline item not found")
+    for field, value in payload.model_dump().items():
+        setattr(item, field, value)
     db.commit()
     db.refresh(item)
     return item
@@ -149,12 +179,24 @@ def mark_read(msg_id: int, db: Session = Depends(get_db), admin: str = Depends(g
     db.commit()
     return {"ok": True}
 
+@router.delete("/messages/{msg_id}")
+def delete_message(msg_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    msg = db.query(models.ContactMessage).filter(models.ContactMessage.id == msg_id).first()
+    if not msg:
+        raise HTTPException(404, "Message not found")
+    db.delete(msg)
+    db.commit()
+    return {"ok": True}
+
 @router.post("/projects/{project_id}/images", response_model=schemas.ProjectImageOut)
 def add_project_image(project_id: int, payload: schemas.ProjectImageCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    clean_url = payload.image_url.strip()
+    if not clean_url:
+        raise HTTPException(400, "Image URL cannot be empty")
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
         raise HTTPException(404, "Project not found")
-    image = models.ProjectImage(project_id=project_id, image_url=payload.image_url, order=payload.order)
+    image = models.ProjectImage(project_id=project_id, image_url=clean_url, order=payload.order)
     db.add(image)
     db.commit()
     db.refresh(image)

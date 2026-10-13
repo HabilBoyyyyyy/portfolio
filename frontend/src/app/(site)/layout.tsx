@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import {getProfile, getSections, isVisible} from "@/lib/api";
 import {socials} from "@/lib/site";
+import EasterEggs from "@/components/easter-eggs/EasterEggs";
 
 const NAV = [
   {key: "hero", id: "home", label: "Home"},
@@ -37,6 +38,9 @@ export default async function SiteLayout({
           <p className="font-mono text-xs text-sand-600">
             © {new Date().getFullYear()} {fullName}. All rights reserved.
           </p>
+          <div className="order-last md:order-none">
+            <EasterEggs resumeUrl={profile?.resume_url ?? null} />
+          </div>
           <ul className="flex gap-6">
             {socials.map((s) => (
               <li key={s.label}>

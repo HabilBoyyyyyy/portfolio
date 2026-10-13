@@ -83,7 +83,7 @@ export default function Hero({profile}: {profile: Profile | null}) {
         role="Informatics Student & Web Developer"
         location="East Bekasi, Indonesia"
         status="Open to work"
-        photo="/images/profile.webp"
+        photo={profile?.hero_image_url || "/images/profile.webp"}
       />
     </section>
   );

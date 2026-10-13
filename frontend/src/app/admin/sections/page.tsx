@@ -1,5 +1,7 @@
+export const dynamic = 'force-dynamic';
 import {adminFetch} from "@/lib/adminApi";
 import {revalidatePath} from "next/cache";
+import type {Section} from "@/lib/api";
 
 const KNOWN_SECTIONS = [
   "hero",
@@ -40,7 +42,7 @@ async function toggleSection(formData: FormData) {
 export default async function SectionsAdminPage() {
   const saved = await getSections();
   const sections = KNOWN_SECTIONS.map((key) => {
-    const found = saved.find((s: any) => s.key === key);
+    const found = saved.find((s: Section) => s.key === key);
     return {key, visible: found ? found.visible : true};
   });
 
@@ -75,3 +77,4 @@ export default async function SectionsAdminPage() {
     </div>
   );
 }
+

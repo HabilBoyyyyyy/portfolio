@@ -2,10 +2,13 @@ const API = process.env.BACKEND_URL;
 
 export type Profile = {
   name: string;
+  role?: string | null;
   tagline?: string | null;
   bio?: string | null;
   email?: string | null;
   resume_url?: string | null;
+  hero_image_url?: string | null;
+  about_image_url?: string | null;
   stat_projects?: string | null;
   stat_years?: string | null;
   stat_certs?: string | null;
@@ -14,6 +17,7 @@ export type Profile = {
 export type Skill = {
   id: number;
   name: string;
+  icon_url?: string | null;
   category?: string | null;
   progress: number;
   description?: string | null;
@@ -54,6 +58,16 @@ export type TimelineItem = {
 };
 
 export type Section = {key: string; visible: boolean};
+
+export type ContactMessage = {
+  id: number;
+  name: string;
+  email: string;
+  subject?: string | null;
+  message: string;
+  read: boolean;
+  created_at: string;
+};
 
 // Generic fetcher: if the backend is down or returns an error, we return the
 // fallback instead of crashing the whole page.

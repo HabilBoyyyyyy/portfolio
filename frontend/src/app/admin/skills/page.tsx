@@ -1,13 +1,14 @@
+export const dynamic = 'force-dynamic';
 import {adminFetch} from "@/lib/adminApi";
 import {revalidatePath} from "next/cache";
+import ImageUpload from "@/components/admin/ImageUpload";
+import Paper from "@/components/scrapbook/Paper";
+import type {Skill} from "@/lib/api";
 
 async function getSkills() {
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/api/skills`, {
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
-    return res.json();
+    const res = await adminFetch("/api/admin/skills");
+    return res;
   } catch {
     return [];
   }
@@ -19,8 +20,9 @@ async function createSkill(formData: FormData) {
     method: "POST",
     body: JSON.stringify({
       name: formData.get("name"),
+      icon_url: formData.get("icon_url"),
       category: formData.get("category"),
-      progress: Number(formData.get("progress")) || 0,
+      progress: 0,
       description: formData.get("description"),
       order: Number(formData.get("order")) || 0,
       visible: true,
@@ -40,20 +42,19 @@ async function toggleVisible(formData: FormData) {
   "use server";
   const id = formData.get("id");
   const name = formData.get("name");
+  const icon_url = formData.get("icon_url");
   const category = formData.get("category");
-  const progress = formData.get("progress");
   const description = formData.get("description");
   const order = formData.get("order");
   const visible = formData.get("visible") === "true";
 
-  // Skills use PUT with the full object (see Phase 3's update_skill endpoint),
-  // so we resend all fields with `visible` flipped.
   await adminFetch(`/api/admin/skills/${id}`, {
     method: "PUT",
     body: JSON.stringify({
       name,
+      icon_url,
       category,
-      progress: Number(progress),
+      progress: 0,
       description,
       order: Number(order),
       visible: !visible,
@@ -65,113 +66,112 @@ async function toggleVisible(formData: FormData) {
 export default async function SkillsAdminPage() {
   const skills = await getSkills();
 
+  const inputClass = "w-full rounded border border-sand-300 bg-ivory px-3 py-2 text-sm outline-none transition focus:border-terracotta-600 font-mono";
+  const labelClass = "mb-1 block font-mono text-[10px] uppercase tracking-widest text-sand-600";
+
   return (
-    <div className="space-y-8 max-w-2xl">
-      <h1 className="text-2xl font-bold">Skills</h1>
+    <div className="space-y-8">
+      <h1 className="font-display text-4xl text-ink uppercase tracking-wider">Skills Management</h1>
 
-      {/* Add new skill */}
-      <form
-        action={createSkill}
-        className="space-y-3 p-4 border rounded-lg bg-white">
-        <h2 className="font-semibold">Add a skill</h2>
-        <input
-          name="name"
-          placeholder="Skill name (e.g. Frontend Development)"
-          required
-          className="w-full border rounded px-3 py-2"
-        />
-        <input
-          name="category"
-          placeholder="Category (optional)"
-          className="w-full border rounded px-3 py-2"
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          rows={2}
-          className="w-full border rounded px-3 py-2"
-        />
-        <div className="flex gap-2">
-          <input
-            name="progress"
-            type="number"
-            min="0"
-            max="100"
-            placeholder="Progress %"
-            className="w-1/2 border rounded px-3 py-2"
-          />
-          <input
-            name="order"
-            type="number"
-            placeholder="Display order"
-            className="w-1/2 border rounded px-3 py-2"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-[#C1502E] text-white px-4 py-2 rounded">
-          Add Skill
-        </button>
-      </form>
-
-      {/* Existing skills list */}
-      <div className="space-y-3">
-        <h2 className="font-semibold">Current skills</h2>
-        {skills.length === 0 && (
-          <p className="text-sm text-gray-500">No skills yet.</p>
-        )}
-        {skills.map((skill: any) => (
-          <div
-            key={skill.id}
-            className="p-4 border rounded-lg bg-white flex items-center justify-between">
+      <Paper rotate={-0.5} tape className="!p-8">
+        <form action={createSkill} className="space-y-6">
+          <h2 className="font-display text-2xl text-terracotta-600 mb-2 border-b border-sand-200 pb-2">Add New Skill</h2>
+          
+          <div className="grid gap-6">
             <div>
-              <p className="font-medium">
-                {skill.name} — {skill.progress}%
-              </p>
-              <p className="text-sm text-gray-500">{skill.category}</p>
-              <p className="text-sm text-gray-400">{skill.description}</p>
-              <p className="text-xs text-gray-400">
-                {skill.visible ? "Visible" : "Hidden"} · order {skill.order}
-              </p>
+              <label className={labelClass}>Icon Image (Optional)</label>
+              <ImageUpload name="icon_url" accept="image/svg+xml,image/png,image/webp,image/jpeg" />
+              <p className="text-[10px] font-mono text-sand-500 mt-1">You can upload a file or paste an image URL directly into the box above.</p>
             </div>
-            <div className="flex gap-2">
-              <form action={toggleVisible}>
-                <input type="hidden" name="id" value={skill.id} />
-                <input type="hidden" name="name" value={skill.name} />
-                <input
-                  type="hidden"
-                  name="category"
-                  value={skill.category ?? ""}
-                />
-                <input type="hidden" name="progress" value={skill.progress} />
-                <input
-                  type="hidden"
-                  name="description"
-                  value={skill.description ?? ""}
-                />
-                <input type="hidden" name="order" value={skill.order} />
-                <input
-                  type="hidden"
-                  name="visible"
-                  value={String(skill.visible)}
-                />
-                <button
-                  type="submit"
-                  className="text-sm px-3 py-1 border rounded">
-                  {skill.visible ? "Hide" : "Show"}
-                </button>
-              </form>
-              <form action={deleteSkill}>
-                <input type="hidden" name="id" value={skill.id} />
-                <button
-                  type="submit"
-                  className="text-sm px-3 py-1 border rounded text-[#B33A2E]">
-                  Delete
-                </button>
-              </form>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label className={labelClass}>Skill Name</label>
+                <input name="name" placeholder="e.g. Frontend Development" required className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Category</label>
+                <input name="category" placeholder="e.g. Languages, Tools" className={inputClass} />
+              </div>
+            </div>
+
+            <div>
+              <label className={labelClass}>Description</label>
+              <textarea name="description" placeholder="Description" rows={2} className={inputClass} />
+            </div>
+
+            <div>
+              <label className={labelClass}>Display Order</label>
+              <input name="order" type="number" placeholder="0" className={inputClass} />
             </div>
           </div>
-        ))}
+
+          <div className="flex justify-end pt-4">
+            <button
+              type="submit"
+              className="rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory transition hover:bg-terracotta-700 shadow-md hover:-translate-y-0.5">
+              + Add Skill
+            </button>
+          </div>
+        </form>
+      </Paper>
+
+      <div className="space-y-4">
+        <h2 className="font-display text-2xl text-ink uppercase tracking-wider pl-2">Current Skills</h2>
+        {skills.length === 0 && (
+          <p className="font-mono text-sm text-sand-500 pl-2">No skills yet.</p>
+        )}
+        <div className="grid gap-4">
+          {skills.map((skill: Skill) => (
+            <div
+              key={skill.id}
+              className={`p-5 border border-sand-200 rounded bg-ivory shadow-sm flex items-center justify-between transition-all ${
+                !skill.visible ? "opacity-50 grayscale border-dashed" : "hover:shadow-md hover:border-terracotta-300"
+              }`}>
+              <div className="flex items-center gap-4">
+                {skill.icon_url ? (
+                  <img src={skill.icon_url} alt="" className="w-10 h-10 flex-shrink-0 object-contain" />
+                ) : (
+                  <div className="w-10 h-10 bg-sand-200 rounded flex items-center justify-center font-display text-lg text-sand-600">{skill.name[0]}</div>
+                )}
+                <div>
+                  <p className="font-display text-lg text-ink">
+                    {skill.name}
+                  </p>
+                  <p className="font-mono text-xs text-terracotta-600 mt-1 uppercase tracking-widest">{skill.category}</p>
+                  <p className="text-sm text-sand-600 mt-1">{skill.description}</p>
+                  <p className="font-mono text-[10px] text-sand-400 mt-2 uppercase tracking-widest">
+                    {skill.visible ? "Visible" : "Hidden"} · Order: {skill.order}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <form action={toggleVisible}>
+                  <input type="hidden" name="id" value={skill.id} />
+                  <input type="hidden" name="name" value={skill.name} />
+                  <input type="hidden" name="icon_url" value={skill.icon_url ?? ""} />
+                  <input type="hidden" name="category" value={skill.category ?? ""} />
+                  <input type="hidden" name="description" value={skill.description ?? ""} />
+                  <input type="hidden" name="order" value={skill.order} />
+                  <input type="hidden" name="visible" value={String(skill.visible)} />
+                  <button
+                    type="submit"
+                    className="w-full text-xs font-mono uppercase tracking-widest px-3 py-1.5 border border-sand-300 rounded hover:bg-sand-200 transition">
+                    {skill.visible ? "Hide" : "Show"}
+                  </button>
+                </form>
+                <form action={deleteSkill}>
+                  <input type="hidden" name="id" value={skill.id} />
+                  <button
+                    type="submit"
+                    className="w-full text-xs font-mono uppercase tracking-widest px-3 py-1.5 border border-red-200 text-red-600 rounded hover:bg-red-50 hover:border-red-300 transition">
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

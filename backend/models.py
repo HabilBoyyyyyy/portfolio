@@ -6,10 +6,13 @@ class Profile(Base):
     __tablename__ = "profile"
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+    role = Column(String)
     tagline = Column(String)
     bio = Column(Text)
     email = Column(String)
     resume_url = Column(String)
+    hero_image_url = Column(String)
+    about_image_url = Column(String)
     stat_projects = Column(String)
     stat_years = Column(String)
     stat_certs = Column(String)
@@ -18,6 +21,7 @@ class Skill(Base):
     __tablename__ = "skills"
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+    icon_url = Column(String)
     category = Column(String)
     progress = Column(Integer, default=0)
     description = Column(Text)

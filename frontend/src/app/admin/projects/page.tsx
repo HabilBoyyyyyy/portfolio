@@ -1,13 +1,12 @@
+export const dynamic = 'force-dynamic';
+import ImageUpload from "@/components/admin/ImageUpload";
 import {adminFetch} from "@/lib/adminApi";
 import {revalidatePath} from "next/cache";
+import type {Project, ProjectImage} from "@/lib/api";
 
 async function getProjects() {
   try {
-    const res = await fetch(`${process.env.BACKEND_URL}/api/projects`, {
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
-    return res.json();
+    return await adminFetch("/api/admin/projects");
   } catch {
     return [];
   }
@@ -63,10 +62,14 @@ async function deleteProject(formData: FormData) {
 async function addImage(formData: FormData) {
   "use server";
   const projectId = formData.get("project_id");
+  const imageUrl = formData.get("image_url");
+  if (typeof imageUrl !== "string" || !imageUrl.trim()) {
+    return;
+  }
   await adminFetch(`/api/admin/projects/${projectId}/images`, {
     method: "POST",
     body: JSON.stringify({
-      image_url: formData.get("image_url"),
+      image_url: imageUrl.trim(),
       order: Number(formData.get("order")) || 0,
     }),
   });
@@ -151,7 +154,7 @@ export default async function ProjectsAdminPage() {
         {projects.length === 0 && (
           <p className="text-sm text-gray-500">No projects yet.</p>
         )}
-        {projects.map((project: any) => (
+        {projects.map((project: Project) => (
           <div
             key={project.id}
             className="p-4 border rounded-lg bg-white space-y-3">
@@ -195,30 +198,30 @@ export default async function ProjectsAdminPage() {
                 />
                 <textarea
                   name="summary"
-                  defaultValue={project.summary}
+                  defaultValue={project.summary ?? ""}
                   rows={2}
                   className="w-full border rounded px-3 py-2"
                 />
                 <textarea
                   name="write_up"
-                  defaultValue={project.write_up}
+                  defaultValue={project.write_up ?? ""}
                   rows={5}
                   className="w-full border rounded px-3 py-2"
                 />
                 <input
                   name="tags"
-                  defaultValue={project.tags}
+                  defaultValue={project.tags ?? ""}
                   className="w-full border rounded px-3 py-2"
                 />
                 <div className="flex gap-2">
                   <input
                     name="repo_url"
-                    defaultValue={project.repo_url}
+                    defaultValue={project.repo_url ?? ""}
                     className="w-1/2 border rounded px-3 py-2"
                   />
                   <input
                     name="demo_url"
-                    defaultValue={project.demo_url}
+                    defaultValue={project.demo_url ?? ""}
                     className="w-1/2 border rounded px-3 py-2"
                   />
                 </div>
@@ -250,14 +253,20 @@ export default async function ProjectsAdminPage() {
                 Manage images ({project.images?.length ?? 0})
               </summary>
               <div className="mt-3 space-y-2">
-                {project.images?.map((img: any) => (
+                {project.images?.map((img: ProjectImage) => (
                   <div key={img.id} className="flex items-center gap-3 text-sm">
-                    <img
-                      src={img.image_url}
-                      alt=""
-                      className="w-16 h-12 object-cover rounded border"
-                    />
-                    <span className="truncate flex-1">{img.image_url}</span>
+                    {img.image_url ? (
+                      <img
+                        src={img.image_url}
+                        alt=""
+                        className="w-16 h-12 object-cover rounded border"
+                      />
+                    ) : (
+                      <div className="w-16 h-12 bg-gray-100 rounded border flex items-center justify-center text-xs text-gray-400">
+                        No image
+                      </div>
+                    )}
+                    <span className="truncate flex-1">{img.image_url || "(empty url)"}</span>
                     <form action={deleteImage}>
                       <input type="hidden" name="image_id" value={img.id} />
                       <button type="submit" className="text-[#B33A2E]">
@@ -266,24 +275,22 @@ export default async function ProjectsAdminPage() {
                     </form>
                   </div>
                 ))}
-                <form action={addImage} className="flex gap-2">
+                <form action={addImage} className="space-y-2">
                   <input type="hidden" name="project_id" value={project.id} />
-                  <input
-                    name="image_url"
-                    placeholder="Image URL"
-                    className="flex-1 border rounded px-3 py-1 text-sm"
-                  />
-                  <input
-                    name="order"
-                    type="number"
-                    placeholder="Order"
-                    className="w-20 border rounded px-3 py-1 text-sm"
-                  />
-                  <button
-                    type="submit"
-                    className="text-sm px-3 py-1 border rounded">
-                    Add
-                  </button>
+                  <ImageUpload name="image_url" required />
+                  <div className="flex gap-2">
+                    <input
+                      name="order"
+                      type="number"
+                      placeholder="Order"
+                      className="w-20 border rounded px-3 py-1 text-sm"
+                    />
+                    <button
+                      type="submit"
+                      className="text-sm px-3 py-1 border rounded">
+                      Add
+                    </button>
+                  </div>
                 </form>
               </div>
             </details>
@@ -293,3 +300,4 @@ export default async function ProjectsAdminPage() {
     </div>
   );
 }
+

@@ -1,5 +1,7 @@
+export const dynamic = 'force-dynamic';
 import {adminFetch} from "@/lib/adminApi";
 import {revalidatePath} from "next/cache";
+import type {ContactMessage} from "@/lib/api";
 
 async function markRead(formData: FormData) {
   "use server";
@@ -9,8 +11,16 @@ async function markRead(formData: FormData) {
   revalidatePath("/admin/messages");
 }
 
+async function deleteMessage(formData: FormData) {
+  "use server";
+  await adminFetch(`/api/admin/messages/${formData.get("id")}`, {
+    method: "DELETE",
+  });
+  revalidatePath("/admin/messages");
+}
+
 export default async function MessagesAdminPage() {
-  let messages: any[] = [];
+  let messages: ContactMessage[] = [];
   try {
     messages = await adminFetch("/api/admin/messages");
   } catch {
@@ -53,9 +63,18 @@ export default async function MessagesAdminPage() {
                 </button>
               </form>
             )}
+            <form action={deleteMessage}>
+              <input type="hidden" name="id" value={msg.id} />
+              <button
+                type="submit"
+                className="text-[#B33A2E] border rounded px-3 py-1 text-sm ml-2">
+                Delete
+              </button>
+            </form>
           </div>
         </div>
       ))}
     </div>
   );
 }
+
