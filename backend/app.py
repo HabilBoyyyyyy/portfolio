@@ -3,6 +3,14 @@ import uvicorn
 import gradio as gr
 from main import app
 
+try:
+    import spaces
+    @spaces.GPU
+    def _gpu_worker():
+        return True
+except Exception:
+    pass
+
 with gr.Blocks(title="Habil Portfolio API") as demo:
     gr.Markdown("# 🚀 Habil Portfolio API")
     gr.Markdown("The backend for Habil's Portfolio is online and running.")
