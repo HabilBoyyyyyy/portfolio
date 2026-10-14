@@ -2,13 +2,6 @@
 
 import {useState, useRef} from "react";
 
-/**
- * Replaces a plain text URL input with a file picker that uploads to
- * /api/admin/upload and stores the resulting URL in a hidden input.
- *
- * The hidden <input name={name}> is included in the parent <form>'s
- * FormData so existing server actions pick it up automatically.
- */
 export default function ImageUpload({
   name = "image_url",
   accept = "image/*",
@@ -26,37 +19,81 @@ export default function ImageUpload({
   const [preview, setPreview] = useState<string | null>(existingUrl?.trim() || null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Show local preview immediately
-    setPreview(URL.createObjectURL(file));
+  function compressAndProcessFile(file: File) {
     setError("");
     setUploading(true);
 
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
+    // If it's a PDF (e.g. Resume)
+    if (file.type === "application/pdf") {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        setUrl(result);
+        setPreview(null);
+        setUploading(false);
+      };
+      reader.onerror = () => {
+        setError("Failed to read PDF file.");
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
 
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: fd,
-      });
+    // If it's an image, resize & compress to lightweight WebP data URL
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `Upload failed (${res.status})`);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      try {
+        const maxDimension = 1200;
+        let {width, height} = img;
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          throw new Error("Could not initialize canvas context.");
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        // Compress as WebP
+        const dataUrl = canvas.toDataURL("image/webp", 0.82);
+
+        setUrl(dataUrl);
+        setPreview(dataUrl);
+        setUploading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Compression failed.");
+        setUploading(false);
       }
+    };
 
-      const data = await res.json();
-      setUrl(data.url);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed");
-      setPreview(null);
-      setUrl("");
-    } finally {
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      setError("Failed to load image.");
       setUploading(false);
+    };
+
+    img.src = objectUrl;
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      compressAndProcessFile(file);
     }
   }
 
@@ -75,7 +112,7 @@ export default function ImageUpload({
             setPreview(val.trim() ? val : null);
           }}
           placeholder="Paste URL or choose file..."
-          className="flex-1 rounded border border-sand-300 px-3 py-1.5 text-sm outline-none focus:border-terracotta-600"
+          className="flex-1 rounded border border-sand-300 px-3 py-1.5 text-sm outline-none focus:border-terracotta-600 font-mono"
         />
 
         <button
@@ -83,27 +120,42 @@ export default function ImageUpload({
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
           className="shrink-0 rounded border border-sand-300 bg-ivory px-3 py-1.5 text-sm transition hover:border-terracotta-600 hover:text-terracotta-600 disabled:opacity-50">
-          {uploading ? "Uploading…" : "Upload"}
+          {uploading ? "Processing…" : "Upload"}
         </button>
+
+        {url && (
+          <button
+            type="button"
+            onClick={() => {
+              setUrl("");
+              setPreview(null);
+            }}
+            className="text-xs text-sand-500 hover:text-terracotta-600 underline">
+            Clear
+          </button>
+        )}
 
         <input
           ref={inputRef}
           type="file"
           accept={accept}
-          onChange={handleChange}
+          onChange={handleFileChange}
           className="hidden"
         />
       </div>
 
-      {error && <p className="text-xs text-error">{error}</p>}
+      {error && <p className="text-xs text-red-600">{error}</p>}
 
       {Boolean(preview?.trim()) && !error && (
-        <img
-          src={preview!}
-          alt="Preview"
-          onError={() => setPreview(null)} // Hide if invalid pasted URL
-          className="h-16 w-auto rounded border border-sand-200 object-contain bg-gray-50"
-        />
+        <div className="mt-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={preview!}
+            alt="Preview"
+            onError={() => setPreview(null)}
+            className="h-20 w-auto rounded border border-sand-200 object-contain bg-sand-100 p-1"
+          />
+        </div>
       )}
     </div>
   );
