@@ -15,13 +15,13 @@ export default function Hero({profile}: {profile: Profile | null}) {
   return (
     <section
       id="home"
-      className="mx-auto grid min-h-screen max-w-6xl items-center gap-14 px-6 py-24 md:grid-cols-[1.1fr_0.9fr]">
+      className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-10 px-6 py-20 md:gap-14 md:py-24 md:grid-cols-[1.1fr_0.9fr]">
       <div>
         <p className="font-mono text-xs uppercase tracking-widest text-terracotta-600">
           Informatics student · Web developer · Open to work
         </p>
 
-        <h1 className="mt-5 font-display text-5xl leading-[1.05] text-ink md:text-7xl">
+        <h1 className="mt-5 font-display text-4xl leading-[1.05] text-ink sm:text-5xl md:text-7xl">
           {profile?.tagline ?? "I build digital experiences that matter."}
         </h1>
 
