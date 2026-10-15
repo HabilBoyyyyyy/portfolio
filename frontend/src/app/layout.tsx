@@ -17,11 +17,11 @@ const SITE_URL = "https://portfolio-peach-alpha-6fjhsx26xs.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Habil Baihaki Ramadhan — Informatics Student & Web Developer",
+    default: "Habil Baihaki Ramadhan — Developer & AI Engineer",
     template: "%s — Habil Baihaki Ramadhan",
   },
   description:
-    "Portfolio of Habil Baihaki Ramadhan — informatics student, full-stack web developer, and AI engineer based in East Bekasi, Indonesia.",
+    "Portfolio of Habil Baihaki Ramadhan: informatics student, full-stack developer, and AI engineer in Bekasi, Indonesia.",
   keywords: [
     "Habil Baihaki Ramadhan",
     "portfolio",
@@ -38,15 +38,15 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "Habil Baihaki Ramadhan",
-    title: "Habil Baihaki Ramadhan — Informatics Student & Web Developer",
+    title: "Habil Baihaki Ramadhan — Developer & AI Engineer",
     description:
-      "Portfolio of Habil Baihaki Ramadhan — informatics student, full-stack web developer, and AI engineer based in East Bekasi, Indonesia.",
+      "Portfolio of Habil Baihaki Ramadhan: informatics student, full-stack developer, and AI engineer in Bekasi, Indonesia.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Habil Baihaki Ramadhan — Informatics Student & Web Developer",
+    title: "Habil Baihaki Ramadhan — Developer & AI Engineer",
     description:
-      "Portfolio of Habil Baihaki Ramadhan — informatics student, full-stack web developer, and AI engineer based in East Bekasi, Indonesia.",
+      "Portfolio of Habil Baihaki Ramadhan: informatics student, full-stack developer, and AI engineer in Bekasi, Indonesia.",
   },
 
   robots: {
