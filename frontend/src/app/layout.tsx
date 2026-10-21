@@ -59,8 +59,9 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${fraunces.variable} ${dmSans.variable} ${plexMono.variable}`}>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Analytics />
       </body>
