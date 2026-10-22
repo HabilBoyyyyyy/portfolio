@@ -29,6 +29,18 @@
   --color-green-800: #1f3622;
   --color-green-900: #18291a;
 
+  /* Alias moss to green so admin buttons using bg-moss-600 render properly */
+  --color-moss-50: #f5f6f5;
+  --color-moss-100: #e6eae7;
+  --color-moss-200: #c9d2ca;
+  --color-moss-300: #a8b6a9;
+  --color-moss-400: #7e9481;
+  --color-moss-500: #547158;
+  --color-moss-600: #2f5233;
+  --color-moss-700: #27432a;
+  --color-moss-800: #1f3622;
+  --color-moss-900: #18291a;
+
   /* Neutral scale, ivory to ink (named "sand" so it doesn't clash with Tailwind's built-in neutral) */
   --color-sand-0: #faf6f0;
   --color-sand-50: #efebe5;

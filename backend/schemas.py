@@ -51,6 +51,13 @@ class SkillCreate(BaseModel):
     order: int = 0
     visible: bool = True
 
+class SkillReorderItem(BaseModel):
+    id: int
+    order: int
+
+class SkillReorderRequest(BaseModel):
+    skills: list[SkillReorderItem]
+
 class ProjectImageOut(BaseModel):
     id: int
     image_url: str

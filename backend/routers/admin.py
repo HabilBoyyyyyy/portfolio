@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from database import get_db
 from auth import verify_password, create_access_token, get_current_admin
@@ -31,15 +32,32 @@ def update_profile(payload: schemas.ProfileUpdate, db: Session = Depends(get_db)
 # --- Skills ---
 @router.get("/skills", response_model=list[schemas.SkillOut])
 def get_admin_skills(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    return db.query(models.Skill).order_by(models.Skill.order).all()
+    return db.query(models.Skill).order_by(models.Skill.category, models.Skill.order).all()
 
 @router.post("/skills", response_model=schemas.SkillOut)
 def create_skill(payload: schemas.SkillCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    skill = models.Skill(**payload.model_dump())
+    # Auto-assign order: put new skill at the end of its category
+    payload_data = payload.model_dump()
+    if payload.order == 0:
+        max_order = db.query(func.max(models.Skill.order)).filter(
+            models.Skill.category == payload.category
+        ).scalar() or 0
+        payload_data["order"] = max_order + 1
+    skill = models.Skill(**payload_data)
     db.add(skill)
     db.commit()
     db.refresh(skill)
     return skill
+
+# Static path MUST come before dynamic {skill_id} path for same HTTP method
+@router.put("/skills/reorder", response_model=list[schemas.SkillOut])
+def reorder_skills(payload: schemas.SkillReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    for item in payload.skills:
+        skill = db.query(models.Skill).filter(models.Skill.id == item.id).first()
+        if skill:
+            skill.order = item.order
+    db.commit()
+    return db.query(models.Skill).order_by(models.Skill.category, models.Skill.order).all()
 
 @router.put("/skills/{skill_id}", response_model=schemas.SkillOut)
 def update_skill(skill_id: int, payload: schemas.SkillCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
@@ -52,12 +70,30 @@ def update_skill(skill_id: int, payload: schemas.SkillCreate, db: Session = Depe
     db.refresh(skill)
     return skill
 
+@router.patch("/skills/{skill_id}/visibility", response_model=schemas.SkillOut)
+def toggle_skill_visibility(skill_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    skill = db.query(models.Skill).filter(models.Skill.id == skill_id).first()
+    if not skill:
+        raise HTTPException(404, "Skill not found")
+    skill.visible = not skill.visible
+    db.commit()
+    db.refresh(skill)
+    return skill
+
 @router.delete("/skills/{skill_id}")
 def delete_skill(skill_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     skill = db.query(models.Skill).filter(models.Skill.id == skill_id).first()
     if not skill:
         raise HTTPException(404, "Skill not found")
+    category = skill.category
     db.delete(skill)
+    db.flush()
+    # Re-normalize remaining skills in this category to be strictly contiguous 1..N
+    remaining = db.query(models.Skill).filter(
+        models.Skill.category == category
+    ).order_by(models.Skill.order, models.Skill.id).all()
+    for i, s in enumerate(remaining, start=1):
+        s.order = i
     db.commit()
     return {"ok": True}
 

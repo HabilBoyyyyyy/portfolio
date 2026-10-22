@@ -14,7 +14,7 @@ def get_profile(db: Session = Depends(get_db)):
 
 @router.get("/skills", response_model=list[schemas.SkillOut])
 def get_skills(db: Session = Depends(get_db)):
-    return db.query(models.Skill).filter(models.Skill.visible == True).order_by(models.Skill.order).all()
+    return db.query(models.Skill).filter(models.Skill.visible == True).order_by(models.Skill.category, models.Skill.order).all()
 
 @router.get("/projects", response_model=list[schemas.ProjectOut])
 def get_projects(db: Session = Depends(get_db)):
