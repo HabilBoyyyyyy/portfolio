@@ -1,6 +1,7 @@
 "use client";
 
 import {useState} from "react";
+import {createPortal} from "react-dom";
 import Gallows from "./Gallows";
 import CaseFile from "./CaseFile";
 
@@ -86,12 +87,21 @@ export default function EasterEggs({resumeUrl}: EasterEggsProps) {
         </button>
       </div>
 
-      <Gallows open={modal === "gallows"} onClose={() => setModal(null)} />
-      <CaseFile
-        open={modal === "casefile"}
-        onClose={() => setModal(null)}
-        resumeUrl={resumeUrl}
-      />
+      {typeof document !== "undefined" &&
+        createPortal(
+          <>
+            <Gallows
+              open={modal === "gallows"}
+              onClose={() => setModal(null)}
+            />
+            <CaseFile
+              open={modal === "casefile"}
+              onClose={() => setModal(null)}
+              resumeUrl={resumeUrl}
+            />
+          </>,
+          document.body,
+        )}
     </>
   );
 }

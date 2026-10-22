@@ -130,6 +130,13 @@ def delete_project(project_id: int, db: Session = Depends(get_db), admin: str = 
     db.commit()
     return {"ok": True}
 
+@router.put("/projects/reorder")
+def reorder_projects(payload: schemas.ProjectReorderRequest, db: Session = Depends(get_db)):
+    for item in payload.projects:
+        db.query(models.Project).filter(models.Project.id == item.id).update({"order": item.order})
+    db.commit()
+    return {"ok": True}
+
 # --- Certificates ---
 @router.post("/certificates", response_model=schemas.CertificateOut)
 def create_certificate(payload: schemas.CertificateCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):

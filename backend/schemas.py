@@ -91,6 +91,13 @@ class ProjectCreate(BaseModel):
     order: int = 0
     visible: bool = True
 
+class ProjectReorderItem(BaseModel):
+    id: int
+    order: int
+
+class ProjectReorderRequest(BaseModel):
+    projects: list[ProjectReorderItem]
+
 class CertificateOut(BaseModel):
     id: int
     name: str
