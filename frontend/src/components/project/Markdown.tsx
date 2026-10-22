@@ -5,9 +5,15 @@ export default function Markdown({children}: {children: string}) {
   return (
     <ReactMarkdown
       components={{
+        h1: ({node, ...p}) => (
+          <h1
+            className="mb-4 mt-10 font-display text-3xl text-ink first:mt-0"
+            {...p}
+          />
+        ),
         h2: ({node, ...p}) => (
           <h2
-            className="mb-3 mt-10 font-display text-2xl text-ink first:mt-0"
+            className="mb-3 mt-10 border-b border-sand-200 pb-2 font-display text-2xl text-ink first:mt-0"
             {...p}
           />
         ),
@@ -18,26 +24,30 @@ export default function Markdown({children}: {children: string}) {
           <p className="mb-4 leading-relaxed text-sand-800" {...p} />
         ),
         ul: ({node, ...p}) => (
-          <ul className="mb-4 list-disc space-y-1 pl-6 text-sand-800" {...p} />
+          <ul
+            className="mb-4 list-disc space-y-1.5 pl-6 text-sand-800 marker:text-terracotta-500"
+            {...p}
+          />
         ),
         ol: ({node, ...p}) => (
           <ol
-            className="mb-4 list-decimal space-y-1 pl-6 text-sand-800"
+            className="mb-4 list-decimal space-y-1.5 pl-6 text-sand-800 marker:font-mono marker:text-terracotta-600"
             {...p}
           />
         ),
         blockquote: ({node, ...p}) => (
           <blockquote
-            className="mb-4 border-l-2 border-terracotta-300 pl-4 italic text-sand-700"
+            className="mb-4 rounded-r-lg border-l-2 border-terracotta-400 bg-sand-50/70 py-2.5 pl-4 pr-3 italic text-sand-700"
             {...p}
           />
         ),
+        hr: ({node, ...p}) => <hr className="my-8 border-sand-200" {...p} />,
         strong: ({node, ...p}) => (
           <strong className="font-semibold text-ink" {...p} />
         ),
         a: ({node, ...p}) => (
           <a
-            className="text-terracotta-600 underline underline-offset-2 hover:text-terracotta-700"
+            className="font-medium text-terracotta-600 underline decoration-terracotta-300 underline-offset-4 transition hover:text-terracotta-700"
             target="_blank"
             rel="noopener noreferrer"
             {...p}
@@ -45,7 +55,7 @@ export default function Markdown({children}: {children: string}) {
         ),
         pre: ({node, ...p}) => (
           <pre
-            className="mb-4 overflow-x-auto rounded-lg bg-sand-1000 p-4 text-sm text-ivory"
+            className="mb-5 overflow-x-auto rounded-xl border border-sand-800 bg-ink p-4 text-sm text-ivory shadow-inner"
             {...p}
           />
         ),
@@ -54,7 +64,7 @@ export default function Markdown({children}: {children: string}) {
             <code className={`${className} font-mono text-sm`} {...p} />
           ) : (
             <code
-              className="rounded bg-sand-50 px-1.5 py-0.5 font-mono text-[0.85em]"
+              className="rounded border border-sand-200 bg-sand-50 px-1.5 py-0.5 font-mono text-[0.85em] text-terracotta-700"
               {...p}
             />
           ),

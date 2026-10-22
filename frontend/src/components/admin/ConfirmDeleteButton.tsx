@@ -11,7 +11,9 @@ export default function ConfirmDeleteButton({
     <button
       type="submit"
       onClick={(e) => {
-        if (!window.confirm(`Delete skill "${skillName}"? This cannot be undone.`)) {
+        if (
+          !window.confirm(`Delete skill "${skillName}"? This cannot be undone.`)
+        ) {
           e.preventDefault();
         }
       }}

@@ -421,8 +421,8 @@ export default function SkillsMarquee({skills}: {skills: Skill[]}) {
         </div>
       )}
 
-      {/* Categorized Bento Grid (Shown in Showcase & Grid modes) */}
-      {viewMode !== "index" ? (
+      {/* Categorized Bento Grid (Only shown when "Bento Grid" tab is active) */}
+      {viewMode === "grid" && (
         <div
           className={`grid gap-6 ${
             displayedCategories.length === 1
@@ -462,7 +462,7 @@ export default function SkillsMarquee({skills}: {skills: Skill[]}) {
                   </div>
 
                   {/* Skills List / Tiles */}
-                  <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                  <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
                     {catSkills.map((skill, idx) => {
                       const isSelected = selectedSkill?.id === skill.id;
                       return (
@@ -514,7 +514,9 @@ export default function SkillsMarquee({skills}: {skills: Skill[]}) {
             );
           })}
         </div>
-      ) : (
+      )}
+
+      {viewMode === "index" && (
         /* High-Density Editorial Index Table View */
         <div className="overflow-hidden rounded-2xl border border-sand-200 bg-ivory shadow-xs">
           <div className="divide-y divide-sand-200">

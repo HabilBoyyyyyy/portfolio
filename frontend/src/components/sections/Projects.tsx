@@ -2,108 +2,100 @@ import Link from "next/link";
 import SectionShell from "@/components/SectionShell";
 import Reveal from "@/components/Reveal";
 import Paper from "@/components/scrapbook/Paper";
-import {splitTags, type Project} from "@/lib/api";
+import type {Project} from "@/lib/api";
 
-const TILTS = [-1.4, 1.2, -0.8];
+const TILTS = [-1.4, 1.1, -0.8, 1.3, -1.0, 0.9];
+const MAX_PREVIEW_PROJECTS = 6;
 
 export default function Projects({projects}: {projects: Project[]}) {
+  const visibleProjects = [...projects]
+    .filter((p) => p.visible !== false)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+  const featuredProjects = visibleProjects.slice(0, MAX_PREVIEW_PROJECTS);
+
   return (
     <SectionShell id="projects" label="03 / Projects" title="My Work">
-      {projects.length === 0 && (
-        <p className="text-sand-600 font-mono text-sm">Projects coming soon.</p>
-      )}
+      {featuredProjects.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-sand-300 bg-ivory/60 p-8 text-center">
+          <p className="font-mono text-xs uppercase tracking-widest text-sand-500">
+            03 / Archive Empty
+          </p>
+          <p className="mt-1 font-display text-lg text-ink">
+            Projects coming soon.
+          </p>
+        </div>
+      ) : (
+        <div className="mt-8 space-y-12">
+          {/* Picture-Only Polaroid Contact Sheet (Max 6) */}
+          <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 md:gap-9">
+            {featuredProjects.map((project, i) => {
+              const sortedImages = [...(project.images || [])]
+                .filter((img) => Boolean(img.image_url?.trim()))
+                .sort((a, b) => a.order - b.order);
+              const cover = sortedImages[0];
 
-      <div className="flex flex-col gap-24 md:gap-32 mt-12">
-        {projects.map((p, i) => {
-          const cover = [...(p.images || [])]
-            .filter((img) => Boolean(img.image_url?.trim()))
-            .sort((a, b) => a.order - b.order)[0];
-          const tags = splitTags(p.tags);
-          const isEven = i % 2 === 0;
-
-          return (
-            <Reveal key={p.id} delay={100}>
-              <div 
-                className={`flex flex-col gap-10 md:gap-16 items-center ${
-                  !isEven ? "md:flex-row-reverse" : "md:flex-row"
-                }`}
-              >
-                {/* ── Polaroid Image ── */}
-                <div className="w-full md:w-[55%]">
-                  <Link href={`/projects/${p.slug}`} className="group block outline-none">
+              return (
+                <Reveal key={project.id} delay={i * 70}>
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    aria-label={project.title}
+                    className="group block outline-none focus-visible:ring-2 focus-visible:ring-terracotta-600 focus-visible:ring-offset-4">
                     <Paper
                       tape
                       rotate={TILTS[i % TILTS.length]}
-                      className="!p-4 md:!p-5 transition-all duration-500 hover:-translate-y-2 hover:[--r:0deg] shadow-xl hover:shadow-2xl"
-                    >
-                      <div className="aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-sand-200 border border-sand-200 relative">
+                      className="!p-3.5 sm:!p-4 transition-all duration-500 ease-out hover:-translate-y-2 hover:[--r:0deg] shadow-md hover:shadow-xl">
+                      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2px] border border-sand-200 bg-sand-100">
                         {cover ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={cover.image_url}
-                            alt={`${p.title} screenshot`}
+                            alt={project.title}
                             className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
-                          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-ivory">
-                            <span className="font-display text-7xl text-terracotta-200">
-                              {p.title.charAt(0)}
-                            </span>
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-sand-400">
-                              No screenshot yet
+                          <div className="flex h-full w-full items-center justify-center bg-ivory">
+                            <span className="font-display text-6xl text-terracotta-300 transition-transform duration-500 group-hover:scale-110">
+                              {project.title.charAt(0)}
                             </span>
                           </div>
                         )}
-                        
-                        {/* Polaroid subtle gloss overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/20 pointer-events-none" />
+
+                        {/* Subtle photographic gloss */}
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-ink/10 via-transparent to-white/20 opacity-80 transition-opacity duration-300 group-hover:opacity-40" />
+
+                        {/* Minimal corner frame index stamp (no text/description clutter) */}
+                        <span className="pointer-events-none absolute bottom-2.5 right-2.5 rounded-full border border-white/30 bg-ink/70 px-2 py-0.5 font-mono text-[10px] tracking-widest text-ivory backdrop-blur-xs transition-transform duration-300 group-hover:bg-terracotta-600">
+                          {String(i + 1).padStart(2, "0")} ↗
+                        </span>
                       </div>
                     </Paper>
                   </Link>
-                </div>
+                </Reveal>
+              );
+            })}
+          </div>
 
-                {/* ── Project Details ── */}
-                <div className="w-full md:w-[45%] flex flex-col items-start">
-                  <h3 className="font-display text-3xl md:text-4xl text-ink leading-tight">
-                    <Link href={`/projects/${p.slug}`} className="hover:text-terracotta-600 transition-colors">
-                      {p.title}
-                    </Link>
-                  </h3>
-                  
-                  {p.summary && (
-                    <p className="mt-5 text-[15px] md:text-base leading-relaxed text-sand-700 border-l-2 border-terracotta-300 pl-4">
-                      {p.summary}
-                    </p>
-                  )}
-                  
-                  {tags.length > 0 && (
-                    <ul className="mt-8 flex flex-wrap gap-2">
-                      {tags.map((t) => (
-                        <li
-                          key={t}
-                          className="rounded bg-sand-200/50 border border-sand-300 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-ink/80 transition-colors hover:bg-terracotta-100 hover:text-terracotta-700 hover:border-terracotta-300"
-                        >
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  
-                  <Link 
-                    href={`/projects/${p.slug}`} 
-                    className="group mt-10 inline-flex items-center gap-3 bg-ink text-ivory font-mono text-xs uppercase tracking-widest px-6 py-3 transition-all duration-300 hover:bg-terracotta-700 hover:shadow-[0_4px_14px_rgba(193,80,46,0.3)]"
-                  >
-                    View project
-                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                      →
-                    </span>
-                  </Link>
-                </div>
-              </div>
-            </Reveal>
-          );
-        })}
-      </div>
+          {/* CTA Bar leading to the dedicated /projects page */}
+          <div className="flex flex-col items-center justify-center pt-2">
+            <Link
+              href="/projects"
+              className="group inline-flex items-center gap-3.5 rounded-full border border-ink bg-ink px-8 py-3.5 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-terracotta-600 hover:bg-terracotta-600 hover:shadow-[0_8px_24px_rgba(193,80,46,0.28)]">
+              <span>View Projects</span>
+              {visibleProjects.length > 0 && (
+                <span className="rounded-full bg-ivory/15 px-2 py-0.5 text-[10px] text-ivory">
+                  {visibleProjects.length}
+                </span>
+              )}
+              <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          </div>
+        </div>
+      )}
     </SectionShell>
   );
 }
