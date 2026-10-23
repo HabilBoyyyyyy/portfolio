@@ -100,15 +100,29 @@ def delete_skill(skill_id: int, db: Session = Depends(get_db), admin: str = Depe
 # --- Projects ---
 @router.get("/projects", response_model=list[schemas.ProjectOut])
 def get_admin_projects(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    return db.query(models.Project).order_by(models.Project.order).all()
+    return db.query(models.Project).order_by(models.Project.order, models.Project.id).all()
 
 @router.post("/projects", response_model=schemas.ProjectOut)
 def create_project(payload: schemas.ProjectCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    project = models.Project(**payload.model_dump())
+    payload_data = payload.model_dump()
+    if payload.order == 0:
+        max_order = db.query(func.max(models.Project.order)).scalar() or 0
+        payload_data["order"] = max_order + 1
+    project = models.Project(**payload_data)
     db.add(project)
     db.commit()
     db.refresh(project)
     return project
+
+# Static path MUST come before dynamic {project_id} path for same HTTP method
+@router.put("/projects/reorder")
+def reorder_projects(payload: schemas.ProjectReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    for item in payload.projects:
+        project = db.query(models.Project).filter(models.Project.id == item.id).first()
+        if project:
+            project.order = item.order
+    db.commit()
+    return {"ok": True}
 
 @router.put("/projects/{project_id}", response_model=schemas.ProjectOut)
 def update_project(project_id: int, payload: schemas.ProjectCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
@@ -121,19 +135,50 @@ def update_project(project_id: int, payload: schemas.ProjectCreate, db: Session 
     db.refresh(project)
     return project
 
+@router.patch("/projects/{project_id}/visibility", response_model=schemas.ProjectOut)
+def toggle_project_visibility(project_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    project = db.query(models.Project).filter(models.Project.id == project_id).first()
+    if not project:
+        raise HTTPException(404, "Project not found")
+    project.visible = not project.visible
+    db.commit()
+    db.refresh(project)
+    return project
+
 @router.delete("/projects/{project_id}")
 def delete_project(project_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
         raise HTTPException(404, "Project not found")
     db.delete(project)
+    db.flush()
+    remaining = db.query(models.Project).order_by(models.Project.order, models.Project.id).all()
+    for i, p in enumerate(remaining, start=1):
+        p.order = i
     db.commit()
     return {"ok": True}
 
-@router.put("/projects/reorder")
-def reorder_projects(payload: schemas.ProjectReorderRequest, db: Session = Depends(get_db)):
-    for item in payload.projects:
-        db.query(models.Project).filter(models.Project.id == item.id).update({"order": item.order})
+@router.post("/projects/{project_id}/images", response_model=schemas.ProjectImageOut)
+def add_project_image(project_id: int, payload: schemas.ProjectImageCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    clean_url = payload.image_url.strip()
+    if not clean_url:
+        raise HTTPException(400, "Image URL cannot be empty")
+    project = db.query(models.Project).filter(models.Project.id == project_id).first()
+    if not project:
+        raise HTTPException(404, "Project not found")
+    image = models.ProjectImage(project_id=project_id, image_url=clean_url, order=payload.order)
+    db.add(image)
+    db.commit()
+    db.refresh(image)
+    return image
+
+@router.delete("/projects/images/{image_id}")
+@router.delete("/projects/{project_id}/images/{image_id}")
+def delete_project_image(image_id: int, project_id: int | None = None, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    image = db.query(models.ProjectImage).filter(models.ProjectImage.id == image_id).first()
+    if not image:
+        raise HTTPException(404, "Image not found")
+    db.delete(image)
     db.commit()
     return {"ok": True}
 
@@ -208,48 +253,34 @@ def toggle_section(key: str, payload: schemas.SectionUpdate, db: Session = Depen
     db.refresh(section)
     return section
 
-# --- Messages ---
+# --- Messages (Contact Inbox) ---
 @router.get("/messages", response_model=list[schemas.ContactMessageOut])
+@router.get("/contact", response_model=list[schemas.ContactMessageOut])
 def get_messages(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    return db.query(models.ContactMessage).order_by(models.ContactMessage.created_at.desc()).all()
+    return (
+        db.query(models.ContactMessage)
+        .order_by(models.ContactMessage.created_at.desc(), models.ContactMessage.id.desc())
+        .all()
+    )
 
-@router.put("/messages/{msg_id}/read")
+@router.put("/messages/{msg_id}/read", response_model=schemas.ContactMessageOut)
+@router.patch("/messages/{msg_id}/read", response_model=schemas.ContactMessageOut)
+@router.patch("/contact/{msg_id}/read", response_model=schemas.ContactMessageOut)
 def mark_read(msg_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     msg = db.query(models.ContactMessage).filter(models.ContactMessage.id == msg_id).first()
     if not msg:
         raise HTTPException(404, "Message not found")
-    msg.read = True
+    msg.read = not bool(msg.read)
     db.commit()
-    return {"ok": True}
+    db.refresh(msg)
+    return msg
 
 @router.delete("/messages/{msg_id}")
+@router.delete("/contact/{msg_id}")
 def delete_message(msg_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     msg = db.query(models.ContactMessage).filter(models.ContactMessage.id == msg_id).first()
     if not msg:
         raise HTTPException(404, "Message not found")
     db.delete(msg)
-    db.commit()
-    return {"ok": True}
-
-@router.post("/projects/{project_id}/images", response_model=schemas.ProjectImageOut)
-def add_project_image(project_id: int, payload: schemas.ProjectImageCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    clean_url = payload.image_url.strip()
-    if not clean_url:
-        raise HTTPException(400, "Image URL cannot be empty")
-    project = db.query(models.Project).filter(models.Project.id == project_id).first()
-    if not project:
-        raise HTTPException(404, "Project not found")
-    image = models.ProjectImage(project_id=project_id, image_url=clean_url, order=payload.order)
-    db.add(image)
-    db.commit()
-    db.refresh(image)
-    return image
-
-@router.delete("/projects/images/{image_id}")
-def delete_project_image(image_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    image = db.query(models.ProjectImage).filter(models.ProjectImage.id == image_id).first()
-    if not image:
-        raise HTTPException(404, "Image not found")
-    db.delete(image)
     db.commit()
     return {"ok": True}

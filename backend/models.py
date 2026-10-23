@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from database import Base
@@ -74,13 +75,13 @@ class Section(Base):
 
 class ContactMessage(Base):
     __tablename__ = "contact_messages"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
-    subject = Column(String)
-    message = Column(Text)
-    created_at = Column(DateTime, server_default=func.now())
-    read = Column(Boolean, default=False)
+    subject = Column(String, nullable=True)
+    message = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=func.now(), nullable=False)
+    read = Column(Boolean, default=False, server_default="0", nullable=False)
 
 class AdminUser(Base):
     __tablename__ = "admin_users"

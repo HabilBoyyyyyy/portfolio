@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
@@ -44,7 +45,15 @@ def get_sections(db: Session = Depends(get_db)):
 
 @router.post("/contact", response_model=schemas.ContactMessageOut)
 def submit_contact(payload: schemas.ContactMessageCreate, db: Session = Depends(get_db)):
-    msg = models.ContactMessage(**payload.model_dump())
+    data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    msg = models.ContactMessage(
+        name=data["name"],
+        email=data["email"],
+        subject=data.get("subject"),
+        message=data["message"],
+        created_at=datetime.utcnow(),
+        read=False,
+    )
     db.add(msg)
     db.commit()
     db.refresh(msg)

@@ -35,7 +35,7 @@ export default async function SiteLayout({
       {children}
 
       {/* Editorial Colophon Footer */}
-      <footer className="mt-16 w-full border-t border-sand-200/90 bg-ivory">
+      <footer className="mt-0 w-full border-t border-sand-200/90 bg-ivory">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-3.5 md:flex-row">
           {/* Left: Live Status Dot + Copyright */}
           <div className="flex items-center gap-2.5">

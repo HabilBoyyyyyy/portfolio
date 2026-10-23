@@ -1,6 +1,9 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from datetime import datetime
+import re
+
+EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 class ProfileOut(BaseModel):
     name: str
@@ -58,6 +61,13 @@ class SkillReorderItem(BaseModel):
 class SkillReorderRequest(BaseModel):
     skills: list[SkillReorderItem]
 
+class ProjectReorderItem(BaseModel):
+    id: int
+    order: int
+
+class ProjectReorderRequest(BaseModel):
+    projects: list[ProjectReorderItem]
+
 class ProjectImageOut(BaseModel):
     id: int
     image_url: str
@@ -90,13 +100,6 @@ class ProjectCreate(BaseModel):
     demo_url: Optional[str] = None
     order: int = 0
     visible: bool = True
-
-class ProjectReorderItem(BaseModel):
-    id: int
-    order: int
-
-class ProjectReorderRequest(BaseModel):
-    projects: list[ProjectReorderItem]
 
 class CertificateOut(BaseModel):
     id: int
@@ -135,10 +138,34 @@ class SectionOut(BaseModel):
         from_attributes = True
 
 class ContactMessageCreate(BaseModel):
-    name: str
-    email: EmailStr
-    subject: Optional[str] = None
-    message: str
+    name: str = Field(..., min_length=1, max_length=100)
+    email: str = Field(..., min_length=3, max_length=200)
+    subject: Optional[str] = Field(default=None, max_length=150)
+    message: str = Field(..., min_length=1, max_length=3000)
+
+    @field_validator("name", "message")
+    @classmethod
+    def strip_required(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not cleaned:
+            raise ValueError("Field cannot be empty")
+        return cleaned
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not EMAIL_REGEX.match(cleaned):
+            raise ValueError("Invalid email address")
+        return cleaned
+
+    @field_validator("subject")
+    @classmethod
+    def clean_subject(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        cleaned = v.strip()
+        return cleaned if cleaned else None
 
 class ContactMessageOut(BaseModel):
     id: int
@@ -146,8 +173,8 @@ class ContactMessageOut(BaseModel):
     email: str
     subject: Optional[str] = None
     message: str
-    created_at: datetime
-    read: bool
+    created_at: Optional[datetime] = None
+    read: bool = False
     class Config:
         from_attributes = True
 
