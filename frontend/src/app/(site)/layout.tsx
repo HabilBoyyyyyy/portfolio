@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import InteractiveBackground from "@/components/ui/InteractiveBackground";
 import {getProfile, getSections, isVisible} from "@/lib/api";
 import {socials} from "@/lib/site";
 import EasterEggs from "@/components/easter-eggs/EasterEggs";
@@ -27,6 +28,9 @@ export default async function SiteLayout({
 
   return (
     <>
+      {/* React Bits-inspired Interactive Background ("dot-grid" | "squares" | "waves") */}
+      <InteractiveBackground variant="dot-grid" />
+
       <Navbar
         links={links}
         name={fullName.split(" ")[0]}
@@ -34,7 +38,6 @@ export default async function SiteLayout({
       />
       {children}
 
-      {/* Editorial Colophon Footer */}
       <footer className="mt-0 w-full border-t border-sand-200/90 bg-ivory">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-3.5 md:flex-row">
           {/* Left: Live Status Dot + Copyright */}

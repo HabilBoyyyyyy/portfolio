@@ -92,7 +92,10 @@ export default function ContactForm() {
   }
 
   return (
-    <Paper tape rotate={-0.5} className="!p-6 sm:!p-8 shadow-lg">
+    <Paper
+      tape
+      rotate={-0.5}
+      className="w-full max-w-full overflow-hidden !p-5 sm:!p-8 shadow-lg max-sm:[rotate:0deg]">
       {/* Postcard Header Strip */}
       <div className="mb-6 flex items-start justify-between border-b border-dashed border-sand-300 pb-4">
         <div>
@@ -166,7 +169,7 @@ export default function ContactForm() {
             <label htmlFor="subject" className={label}>
               Subject (optional)
             </label>
-            <span className="mb-1 font-mono text-[9px] uppercase tracking-wider text-sand-400">
+            <span className="mb-1 hidden font-mono text-[9px] uppercase tracking-wider text-sand-400 sm:inline">
               Or tap a quick topic below
             </span>
           </div>
@@ -229,15 +232,15 @@ export default function ContactForm() {
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-2">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-sand-400">
+        <div className="flex flex-col-reverse items-stretch justify-between gap-3 pt-2 sm:flex-row sm:items-center">
+          <span className="text-center font-mono text-[10px] uppercase tracking-widest text-sand-400 sm:text-left">
             Encrypted &amp; Direct
           </span>
 
           <button
             type="submit"
             disabled={status === "sending"}
-            className="group inline-flex items-center gap-2.5 rounded-full bg-terracotta-600 px-7 py-3 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracotta-700 disabled:cursor-not-allowed disabled:opacity-60">
+            className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-terracotta-600 px-6 py-3 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracotta-700 disabled:cursor-not-allowed disabled:opacity-60 sm:px-7">
             <span>{status === "sending" ? "Sending..." : "Send Message"}</span>
             <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
               →
