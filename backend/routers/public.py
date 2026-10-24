@@ -43,11 +43,11 @@ def get_experiences(db: Session = Depends(get_db)):
 
 @router.get("/certificates", response_model=list[schemas.CertificateOut])
 def get_certificates(db: Session = Depends(get_db)):
-    return db.query(models.Certificate).all()
+    return db.query(models.Certificate).order_by(models.Certificate.id.desc()).all()
 
 @router.get("/timeline", response_model=list[schemas.TimelineItemOut])
 def get_timeline(db: Session = Depends(get_db)):
-    return db.query(models.TimelineItem).order_by(models.TimelineItem.order).all()
+    return db.query(models.TimelineItem).order_by(models.TimelineItem.order, models.TimelineItem.id).all()
 
 @router.get("/sections", response_model=list[schemas.SectionOut])
 def get_sections(db: Session = Depends(get_db)):

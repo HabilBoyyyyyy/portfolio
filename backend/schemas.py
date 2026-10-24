@@ -175,6 +175,13 @@ class TimelineItemCreate(BaseModel):
     description: Optional[str] = None
     order: int = 0
 
+class TimelineReorderItem(BaseModel):
+    id: int
+    order: int
+
+class TimelineReorderRequest(BaseModel):
+    items: list[TimelineReorderItem]
+
 class SectionOut(BaseModel):
     key: str
     visible: bool

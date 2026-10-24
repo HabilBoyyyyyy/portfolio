@@ -197,7 +197,6 @@ def create_experience(payload: schemas.ExperienceCreate, db: Session = Depends(g
     db.refresh(exp)
     return exp
 
-# Static path MUST come before dynamic {exp_id} path for same HTTP method
 @router.put("/experiences/reorder", response_model=list[schemas.ExperienceOut])
 @router.put("/experience/reorder", response_model=list[schemas.ExperienceOut])
 def reorder_experiences(payload: schemas.ExperienceReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
@@ -246,6 +245,10 @@ def delete_experience(exp_id: int, db: Session = Depends(get_db), admin: str = D
     return {"ok": True}
 
 # --- Certificates ---
+@router.get("/certificates", response_model=list[schemas.CertificateOut])
+def get_admin_certificates(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    return db.query(models.Certificate).order_by(models.Certificate.id.desc()).all()
+
 @router.post("/certificates", response_model=schemas.CertificateOut)
 def create_certificate(payload: schemas.CertificateCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     cert = models.Certificate(**payload.model_dump())
@@ -275,13 +278,31 @@ def delete_certificate(cert_id: int, db: Session = Depends(get_db), admin: str =
     return {"ok": True}
 
 # --- Timeline ---
+@router.get("/timeline", response_model=list[schemas.TimelineItemOut])
+def get_admin_timeline(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    return db.query(models.TimelineItem).order_by(models.TimelineItem.order, models.TimelineItem.id).all()
+
 @router.post("/timeline", response_model=schemas.TimelineItemOut)
 def create_timeline_item(payload: schemas.TimelineItemCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    item = models.TimelineItem(**payload.model_dump())
+    payload_data = payload.model_dump()
+    if payload.order == 0:
+        max_order = db.query(func.max(models.TimelineItem.order)).scalar() or 0
+        payload_data["order"] = max_order + 1
+    item = models.TimelineItem(**payload_data)
     db.add(item)
     db.commit()
     db.refresh(item)
     return item
+
+# Static /timeline/reorder MUST come before dynamic /timeline/{item_id}
+@router.put("/timeline/reorder", response_model=list[schemas.TimelineItemOut])
+def reorder_timeline(payload: schemas.TimelineReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    for entry in payload.items:
+        item = db.query(models.TimelineItem).filter(models.TimelineItem.id == entry.id).first()
+        if item:
+            item.order = entry.order
+    db.commit()
+    return db.query(models.TimelineItem).order_by(models.TimelineItem.order, models.TimelineItem.id).all()
 
 @router.put("/timeline/{item_id}", response_model=schemas.TimelineItemOut)
 def update_timeline_item(item_id: int, payload: schemas.TimelineItemCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
@@ -300,10 +321,18 @@ def delete_timeline_item(item_id: int, db: Session = Depends(get_db), admin: str
     if not item:
         raise HTTPException(404, "Timeline item not found")
     db.delete(item)
+    db.flush()
+    remaining = db.query(models.TimelineItem).order_by(models.TimelineItem.order, models.TimelineItem.id).all()
+    for i, t in enumerate(remaining, start=1):
+        t.order = i
     db.commit()
     return {"ok": True}
 
 # --- Sections (show/hide) ---
+@router.get("/sections", response_model=list[schemas.SectionOut])
+def get_admin_sections(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    return db.query(models.Section).all()
+
 @router.put("/sections/{key}", response_model=schemas.SectionOut)
 def toggle_section(key: str, payload: schemas.SectionUpdate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     section = db.query(models.Section).filter(models.Section.key == key).first()
