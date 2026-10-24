@@ -15,7 +15,7 @@ export default function Projects({projects}: {projects: Project[]}) {
   const featuredProjects = visibleProjects.slice(0, MAX_PREVIEW_PROJECTS);
 
   return (
-    <SectionShell id="projects" label="03 / Projects" title="My Work">
+    <SectionShell id="projects" label="Projects" title="My Work">
       {featuredProjects.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-sand-300 bg-ivory/60 p-8 text-center">
           <p className="font-mono text-xs uppercase tracking-widest text-sand-500">

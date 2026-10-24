@@ -11,7 +11,7 @@ export default function Certificates({
   return (
     <SectionShell
       id="certificates"
-      label="04 / Certificates"
+      label="Certificates"
       title="Credentials">
       <div className="grid gap-6 md:grid-cols-2">
         {certificates.map((c, i) => (

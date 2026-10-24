@@ -4,7 +4,7 @@ import type {TimelineItem} from "@/lib/api";
 
 export default function Timeline({items}: {items: TimelineItem[]}) {
   return (
-    <SectionShell id="timeline" label="05 / Journey" title="How I got here">
+    <SectionShell id="timeline" label="Journey" title="How I got here">
       <TimelineList items={items} />
     </SectionShell>
   );

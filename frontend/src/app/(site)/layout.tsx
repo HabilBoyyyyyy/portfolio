@@ -9,6 +9,7 @@ const NAV = [
   {key: "about", id: "about", label: "About"},
   {key: "skills", id: "skills", label: "Skills"},
   {key: "projects", id: "projects", label: "Projects"},
+  {key: "experience", id: "experience", label: "Experience"},
   {key: "certificates", id: "certificates", label: "Certificates"},
   {key: "timeline", id: "timeline", label: "Journey"},
   {key: "contact", id: "contact", label: "Contact"},
@@ -28,7 +29,6 @@ export default async function SiteLayout({
 
   return (
     <>
-      {/* React Bits-inspired Interactive Background ("dot-grid" | "squares" | "waves") */}
       <InteractiveBackground variant="dot-grid" />
 
       <Navbar
@@ -40,7 +40,6 @@ export default async function SiteLayout({
 
       <footer className="mt-0 w-full border-t border-sand-200/90 bg-ivory">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-3.5 md:flex-row">
-          {/* Left: Live Status Dot + Copyright */}
           <div className="flex items-center gap-2.5">
             <span
               className="h-2 w-2 rounded-full bg-green-600"
@@ -53,12 +52,10 @@ export default async function SiteLayout({
             </p>
           </div>
 
-          {/* Center: Compact Custom SVG Easter Eggs Dock */}
           <div className="order-last md:order-none">
             <EasterEggs resumeUrl={profile?.resume_url ?? null} />
           </div>
 
-          {/* Right: Social Links + Compact Back-to-Top Button */}
           <div className="flex items-center gap-5">
             <ul className="flex items-center gap-5">
               {socials.map((s) => (

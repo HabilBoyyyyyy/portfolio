@@ -36,7 +36,6 @@ def get_admin_skills(db: Session = Depends(get_db), admin: str = Depends(get_cur
 
 @router.post("/skills", response_model=schemas.SkillOut)
 def create_skill(payload: schemas.SkillCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    # Auto-assign order: put new skill at the end of its category
     payload_data = payload.model_dump()
     if payload.order == 0:
         max_order = db.query(func.max(models.Skill.order)).filter(
@@ -49,7 +48,6 @@ def create_skill(payload: schemas.SkillCreate, db: Session = Depends(get_db), ad
     db.refresh(skill)
     return skill
 
-# Static path MUST come before dynamic {skill_id} path for same HTTP method
 @router.put("/skills/reorder", response_model=list[schemas.SkillOut])
 def reorder_skills(payload: schemas.SkillReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     for item in payload.skills:
@@ -88,7 +86,6 @@ def delete_skill(skill_id: int, db: Session = Depends(get_db), admin: str = Depe
     category = skill.category
     db.delete(skill)
     db.flush()
-    # Re-normalize remaining skills in this category to be strictly contiguous 1..N
     remaining = db.query(models.Skill).filter(
         models.Skill.category == category
     ).order_by(models.Skill.order, models.Skill.id).all()
@@ -114,7 +111,6 @@ def create_project(payload: schemas.ProjectCreate, db: Session = Depends(get_db)
     db.refresh(project)
     return project
 
-# Static path MUST come before dynamic {project_id} path for same HTTP method
 @router.put("/projects/reorder")
 def reorder_projects(payload: schemas.ProjectReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     for item in payload.projects:
@@ -179,6 +175,73 @@ def delete_project_image(image_id: int, project_id: int | None = None, db: Sessi
     if not image:
         raise HTTPException(404, "Image not found")
     db.delete(image)
+    db.commit()
+    return {"ok": True}
+
+# --- Experiences ---
+@router.get("/experiences", response_model=list[schemas.ExperienceOut])
+@router.get("/experience", response_model=list[schemas.ExperienceOut])
+def get_admin_experiences(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    return db.query(models.Experience).order_by(models.Experience.order, models.Experience.id).all()
+
+@router.post("/experiences", response_model=schemas.ExperienceOut)
+@router.post("/experience", response_model=schemas.ExperienceOut)
+def create_experience(payload: schemas.ExperienceCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    payload_data = payload.model_dump()
+    if payload.order == 0:
+        max_order = db.query(func.max(models.Experience.order)).scalar() or 0
+        payload_data["order"] = max_order + 1
+    exp = models.Experience(**payload_data)
+    db.add(exp)
+    db.commit()
+    db.refresh(exp)
+    return exp
+
+# Static path MUST come before dynamic {exp_id} path for same HTTP method
+@router.put("/experiences/reorder", response_model=list[schemas.ExperienceOut])
+@router.put("/experience/reorder", response_model=list[schemas.ExperienceOut])
+def reorder_experiences(payload: schemas.ExperienceReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    for item in payload.experiences:
+        exp = db.query(models.Experience).filter(models.Experience.id == item.id).first()
+        if exp:
+            exp.order = item.order
+    db.commit()
+    return db.query(models.Experience).order_by(models.Experience.order, models.Experience.id).all()
+
+@router.put("/experiences/{exp_id}", response_model=schemas.ExperienceOut)
+@router.put("/experience/{exp_id}", response_model=schemas.ExperienceOut)
+def update_experience(exp_id: int, payload: schemas.ExperienceCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    exp = db.query(models.Experience).filter(models.Experience.id == exp_id).first()
+    if not exp:
+        raise HTTPException(404, "Experience not found")
+    for field, value in payload.model_dump().items():
+        setattr(exp, field, value)
+    db.commit()
+    db.refresh(exp)
+    return exp
+
+@router.patch("/experiences/{exp_id}/visibility", response_model=schemas.ExperienceOut)
+@router.patch("/experience/{exp_id}/visibility", response_model=schemas.ExperienceOut)
+def toggle_experience_visibility(exp_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    exp = db.query(models.Experience).filter(models.Experience.id == exp_id).first()
+    if not exp:
+        raise HTTPException(404, "Experience not found")
+    exp.visible = not exp.visible
+    db.commit()
+    db.refresh(exp)
+    return exp
+
+@router.delete("/experiences/{exp_id}")
+@router.delete("/experience/{exp_id}")
+def delete_experience(exp_id: int, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    exp = db.query(models.Experience).filter(models.Experience.id == exp_id).first()
+    if not exp:
+        raise HTTPException(404, "Experience not found")
+    db.delete(exp)
+    db.flush()
+    remaining = db.query(models.Experience).order_by(models.Experience.order, models.Experience.id).all()
+    for i, e in enumerate(remaining, start=1):
+        e.order = i
     db.commit()
     return {"ok": True}
 

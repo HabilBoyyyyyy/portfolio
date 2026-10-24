@@ -41,6 +41,24 @@ export type Project = {
   images: ProjectImage[];
 };
 
+export type Experience = {
+  id: number;
+  role: string;
+  company: string;
+  company_url?: string | null;
+  company_logo_url?: string | null;
+  location?: string | null;
+  employment_type?: string | null;
+  start_date: string;
+  end_date?: string | null;
+  is_current: boolean;
+  summary?: string | null;
+  description?: string | null;
+  tags?: string | null;
+  order: number;
+  visible: boolean;
+};
+
 export type Certificate = {
   id: number;
   name: string;
@@ -86,6 +104,7 @@ export const getSkills = () => get<Skill[]>("/api/skills", []);
 export const getProjects = () => get<Project[]>("/api/projects", []);
 export const getProject = (slug: string) =>
   get<Project | null>(`/api/projects/${slug}`, null);
+export const getExperiences = () => get<Experience[]>("/api/experiences", []);
 export const getCertificates = () =>
   get<Certificate[]>("/api/certificates", []);
 export const getTimeline = () => get<TimelineItem[]>("/api/timeline", []);

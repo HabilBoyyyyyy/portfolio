@@ -51,6 +51,26 @@ class ProjectImage(Base):
     order = Column(Integer, default=0)
     project = relationship("Project", back_populates="images")
 
+class Experience(Base):
+    __tablename__ = "experiences"
+    id = Column(Integer, primary_key=True, index=True)
+    role = Column(String(150), nullable=False)
+    company = Column(String(150), nullable=False)
+    company_url = Column(String(500))
+    company_logo_url = Column(String(500))
+    location = Column(String(150))
+    employment_type = Column(String(80))
+    start_date = Column(String(50), nullable=False)
+    end_date = Column(String(50))
+    is_current = Column(Boolean, default=False, server_default="0", nullable=False)
+    summary = Column(Text)
+    description = Column(Text)
+    tags = Column(String(500))
+    order = Column(Integer, default=0, server_default="0", nullable=False)
+    visible = Column(Boolean, default=True, server_default="1", nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, server_default=func.now(), onupdate=func.now(), nullable=False)
+
 class Certificate(Base):
     __tablename__ = "certificates"
     id = Column(Integer, primary_key=True)

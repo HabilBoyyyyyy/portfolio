@@ -7,7 +7,7 @@ export default function Contact({profile}: {profile: Profile | null}) {
   const email = profile?.email || "habilramadhan1005@gmail.com";
 
   return (
-    <SectionShell id="contact" label="06 / Contact" title="Let's talk">
+    <SectionShell id="contact" label="Contact" title="Let's talk">
       <div className="-mb-8 grid w-full max-w-full grid-cols-[minmax(0,1fr)] items-start gap-8 md:-mb-14 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-14">
         <div className="min-w-0 max-w-full">
           <Reveal>

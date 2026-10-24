@@ -31,6 +31,16 @@ def get_project(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(404, "Project not found")
     return project
 
+@router.get("/experiences", response_model=list[schemas.ExperienceOut])
+@router.get("/experience", response_model=list[schemas.ExperienceOut])
+def get_experiences(db: Session = Depends(get_db)):
+    return (
+        db.query(models.Experience)
+        .filter(models.Experience.visible == True)
+        .order_by(models.Experience.order, models.Experience.id)
+        .all()
+    )
+
 @router.get("/certificates", response_model=list[schemas.CertificateOut])
 def get_certificates(db: Session = Depends(get_db)):
     return db.query(models.Certificate).all()

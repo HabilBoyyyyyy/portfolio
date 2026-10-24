@@ -101,6 +101,50 @@ class ProjectCreate(BaseModel):
     order: int = 0
     visible: bool = True
 
+class ExperienceOut(BaseModel):
+    id: int
+    role: str
+    company: str
+    company_url: Optional[str] = None
+    company_logo_url: Optional[str] = None
+    location: Optional[str] = None
+    employment_type: Optional[str] = None
+    start_date: str
+    end_date: Optional[str] = None
+    is_current: bool = False
+    summary: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[str] = None
+    order: int = 0
+    visible: bool = True
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    class Config:
+        from_attributes = True
+
+class ExperienceCreate(BaseModel):
+    role: str
+    company: str
+    company_url: Optional[str] = None
+    company_logo_url: Optional[str] = None
+    location: Optional[str] = None
+    employment_type: Optional[str] = None
+    start_date: str
+    end_date: Optional[str] = None
+    is_current: bool = False
+    summary: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[str] = None
+    order: int = 0
+    visible: bool = True
+
+class ExperienceReorderItem(BaseModel):
+    id: int
+    order: int
+
+class ExperienceReorderRequest(BaseModel):
+    experiences: list[ExperienceReorderItem]
+
 class CertificateOut(BaseModel):
     id: int
     name: str

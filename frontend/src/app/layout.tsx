@@ -3,7 +3,6 @@ import {Fraunces, DM_Sans, IBM_Plex_Mono} from "next/font/google";
 import {Analytics} from "@vercel/analytics/next";
 import "./globals.css";
 
-
 const fraunces = Fraunces({subsets: ["latin"], variable: "--font-fraunces"});
 const dmSans = DM_Sans({subsets: ["latin"], variable: "--font-dm-sans"});
 const plexMono = IBM_Plex_Mono({
@@ -65,7 +64,6 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         {children}
         <Analytics />
       </body>
-
     </html>
   );
 }

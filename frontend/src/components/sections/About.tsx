@@ -6,7 +6,7 @@ import AboutText from "./AboutText";
 
 export default function About({profile}: {profile: Profile | null}) {
   return (
-    <SectionShell id="about" label="01 / About" title="About me">
+    <SectionShell id="about" label="About" title="About me">
       <div className="grid gap-12 md:grid-cols-[0.8fr_1.2fr] items-center">
         
         <Reveal>
