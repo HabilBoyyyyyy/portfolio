@@ -13,6 +13,19 @@ export async function adminFetch(path: string, options: RequestInit = {}) {
     cache: "no-store",
   });
 
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  if (!res.ok) {
+    let errorDetail = "";
+    try {
+      const errJson = await res.json();
+      errorDetail = errJson.detail || JSON.stringify(errJson);
+    } catch {
+      try {
+        errorDetail = await res.text();
+      } catch {
+        // ignore
+      }
+    }
+    throw new Error(`API error: ${res.status}${errorDetail ? ` - ${errorDetail}` : ""}`);
+  }
   return res.json();
 }

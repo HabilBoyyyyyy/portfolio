@@ -17,14 +17,34 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     return {"access_token": token}
 
 # --- Profile ---
+@router.get("/profile", response_model=schemas.ProfileOut)
+def get_admin_profile(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
+    profile = db.query(models.Profile).first()
+    if not profile:
+        return schemas.ProfileOut(
+            name="Habil Baihaki Ramadhan",
+            role="Full-Stack Developer & AI Engineer",
+            tagline="I build digital experiences that matter.",
+        )
+    return profile
+
 @router.put("/profile", response_model=schemas.ProfileOut)
 def update_profile(payload: schemas.ProfileUpdate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     profile = db.query(models.Profile).first()
+    data = payload.model_dump(exclude_unset=True) if hasattr(payload, "model_dump") else payload.dict(exclude_unset=True)
+    safe_name = (data.get("name") or "").strip() or "Habil Baihaki Ramadhan"
+
     if not profile:
-        profile = models.Profile(name=payload.name or "Habil")
+        profile = models.Profile(name=safe_name)
         db.add(profile)
-    for field, value in payload.model_dump(exclude_unset=True).items():
-        setattr(profile, field, value)
+
+    for field, value in data.items():
+        if field == "name":
+            setattr(profile, "name", safe_name)
+        else:
+            cleaned = value.strip() if isinstance(value, str) else value
+            setattr(profile, field, cleaned if cleaned != "" else None)
+
     db.commit()
     db.refresh(profile)
     return profile
@@ -182,13 +202,19 @@ def delete_project_image(image_id: int, project_id: int | None = None, db: Sessi
 @router.get("/experiences", response_model=list[schemas.ExperienceOut])
 @router.get("/experience", response_model=list[schemas.ExperienceOut])
 def get_admin_experiences(db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    return db.query(models.Experience).order_by(models.Experience.order, models.Experience.id).all()
+    return (
+        db.query(models.Experience)
+        .order_by(models.Experience.order, models.Experience.id)
+        .all()
+    )
 
 @router.post("/experiences", response_model=schemas.ExperienceOut)
 @router.post("/experience", response_model=schemas.ExperienceOut)
 def create_experience(payload: schemas.ExperienceCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    payload_data = payload.model_dump()
-    if payload.order == 0:
+    payload_data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    if payload_data.get("is_current"):
+        payload_data["end_date"] = None
+    if not payload_data.get("order") or payload_data["order"] == 0:
         max_order = db.query(func.max(models.Experience.order)).scalar() or 0
         payload_data["order"] = max_order + 1
     exp = models.Experience(**payload_data)
@@ -197,15 +223,15 @@ def create_experience(payload: schemas.ExperienceCreate, db: Session = Depends(g
     db.refresh(exp)
     return exp
 
-@router.put("/experiences/reorder", response_model=list[schemas.ExperienceOut])
-@router.put("/experience/reorder", response_model=list[schemas.ExperienceOut])
+@router.put("/experiences/reorder")
+@router.put("/experience/reorder")
 def reorder_experiences(payload: schemas.ExperienceReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     for item in payload.experiences:
         exp = db.query(models.Experience).filter(models.Experience.id == item.id).first()
         if exp:
             exp.order = item.order
     db.commit()
-    return db.query(models.Experience).order_by(models.Experience.order, models.Experience.id).all()
+    return {"ok": True}
 
 @router.put("/experiences/{exp_id}", response_model=schemas.ExperienceOut)
 @router.put("/experience/{exp_id}", response_model=schemas.ExperienceOut)
@@ -213,7 +239,10 @@ def update_experience(exp_id: int, payload: schemas.ExperienceCreate, db: Sessio
     exp = db.query(models.Experience).filter(models.Experience.id == exp_id).first()
     if not exp:
         raise HTTPException(404, "Experience not found")
-    for field, value in payload.model_dump().items():
+    payload_data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    if payload_data.get("is_current"):
+        payload_data["end_date"] = None
+    for field, value in payload_data.items():
         setattr(exp, field, value)
     db.commit()
     db.refresh(exp)
@@ -284,8 +313,8 @@ def get_admin_timeline(db: Session = Depends(get_db), admin: str = Depends(get_c
 
 @router.post("/timeline", response_model=schemas.TimelineItemOut)
 def create_timeline_item(payload: schemas.TimelineItemCreate, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
-    payload_data = payload.model_dump()
-    if payload.order == 0:
+    payload_data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    if not payload_data.get("order") or payload_data["order"] == 0:
         max_order = db.query(func.max(models.TimelineItem.order)).scalar() or 0
         payload_data["order"] = max_order + 1
     item = models.TimelineItem(**payload_data)
@@ -294,7 +323,6 @@ def create_timeline_item(payload: schemas.TimelineItemCreate, db: Session = Depe
     db.refresh(item)
     return item
 
-# Static /timeline/reorder MUST come before dynamic /timeline/{item_id}
 @router.put("/timeline/reorder", response_model=list[schemas.TimelineItemOut])
 def reorder_timeline(payload: schemas.TimelineReorderRequest, db: Session = Depends(get_db), admin: str = Depends(get_current_admin)):
     for entry in payload.items:

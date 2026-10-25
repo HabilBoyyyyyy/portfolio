@@ -33,6 +33,38 @@ class ProfileUpdate(BaseModel):
     stat_years: Optional[str] = None
     stat_certs: Optional[str] = None
 
+    @field_validator(
+        "role",
+        "tagline",
+        "bio",
+        "email",
+        "resume_url",
+        "hero_image_url",
+        "about_image_url",
+        "stat_projects",
+        "stat_years",
+        "stat_certs",
+        mode="before",
+    )
+    @classmethod
+    def empty_str_to_none(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if isinstance(v, str):
+            cleaned = v.strip()
+            return cleaned if cleaned else None
+        return v
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def clean_name(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if isinstance(v, str):
+            cleaned = v.strip()
+            return cleaned if cleaned else "Habil Baihaki Ramadhan"
+        return v
+
 class SkillOut(BaseModel):
     id: int
     name: str

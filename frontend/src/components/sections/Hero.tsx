@@ -1,89 +1,112 @@
 import type {Profile} from "@/lib/api";
 import TiltCard from "@/components/hero/TiltCard";
-import Paper from "@/components/scrapbook/Paper";
 
 export default function Hero({profile}: {profile: Profile | null}) {
-  const name = profile?.name ?? "Habil Baihaki Ramadhan";
+  const name = profile?.name?.trim() || "Habil Baihaki Ramadhan";
+  const role = profile?.role?.trim() || "Informatics Student & Web Developer";
+  const tagline =
+    profile?.tagline?.trim() || "I build digital experiences that matter.";
+
+  // Extract a crisp lead from bio if present (avoids duplicating the full multi-paragraph story from About)
+  const rawBio = profile?.bio?.trim() || "";
+  const leadSentence = rawBio
+    ? rawBio.split(/(?<=[.!?])\s+/)[0]
+    : "Building practical software systems where full-stack web engineering meets AI/ML and real-world hardware.";
 
   const stats = [
-    {label: "Projects", value: profile?.stat_projects},
-    {label: "Years learning", value: profile?.stat_years},
-    {label: "Certifications", value: profile?.stat_certs},
-  ].filter((s) => s.value);
-  const tilts = [-2, 1.5, -1];
+    {label: "Projects", value: profile?.stat_projects?.trim()},
+    {label: "Years learning", value: profile?.stat_years?.trim()},
+    {label: "Certifications", value: profile?.stat_certs?.trim()},
+  ].filter((s) => Boolean(s.value));
 
   return (
     <section
       id="home"
-      className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-10 px-6 py-20 md:gap-14 md:py-24 md:grid-cols-[1.1fr_0.9fr]">
+      className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-[1.1fr_0.9fr] md:gap-14 md:py-24">
+      {/* ── Left Column: Lightweight Editorial Masthead ── */}
       <div>
-        <p className="font-mono text-xs uppercase tracking-widest text-terracotta-600">
-          Informatics student · Web developer · Open to work
-        </p>
+        {/* Status + Role Eyebrow */}
+        <div className="inline-flex flex-wrap items-center gap-2.5 rounded-full border border-sand-300 bg-ivory/90 px-3.5 py-1.5 shadow-2xs">
+          <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-green-700">
+            <span className="h-2 w-2 rounded-full bg-green-600" />
+            Open to work
+          </span>
+          <span className="text-sand-300">·</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-sand-700">
+            {role}
+          </span>
+        </div>
 
-        <h1 className="mt-5 font-display text-4xl leading-[1.05] text-ink sm:text-5xl md:text-7xl">
-          {profile?.tagline ?? "I build digital experiences that matter."}
+        {/* Main Display Tagline */}
+        <h1 className="mt-5 font-display text-4xl leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-6xl lg:text-7xl">
+          {tagline}
         </h1>
 
-        {profile?.bio && (
-          <p className="mt-6 line-clamp-3 max-w-xl text-lg text-sand-700">
-            {profile.bio}
-          </p>
-        )}
+        {/* Concise Lead Paragraph */}
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-sand-700 sm:text-lg">
+          {leadSentence}
+        </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        {/* Primary Action Buttons */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href="#projects"
-            className="rounded-full bg-terracotta-600 px-6 py-3 text-sm font-medium text-ivory transition hover:bg-terracotta-700">
+            className="inline-flex items-center gap-2 rounded-full bg-terracotta-600 px-6 py-3 font-mono text-xs uppercase tracking-[0.18em] text-ivory transition hover:bg-terracotta-700">
             View projects
+            <span aria-hidden="true">→</span>
           </a>
+
           {profile?.resume_url && (
             <a
               href={profile.resume_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-sand-300 px-6 py-3 text-sm font-medium transition hover:border-terracotta-600 hover:text-terracotta-600">
+              className="inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-ivory/80 px-6 py-3 font-mono text-xs uppercase tracking-[0.18em] text-ink transition hover:border-terracotta-600 hover:text-terracotta-600">
               Download CV
+              <span aria-hidden="true">↗</span>
             </a>
           )}
+
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-1.5 rounded-full px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] text-sand-700 underline decoration-sand-400 underline-offset-4 transition hover:text-terracotta-600 hover:decoration-terracotta-600">
+            Let&apos;s talk
+          </a>
         </div>
 
+        {/* Lightweight Inline Stat Strip */}
         {stats.length > 0 && (
-          <div className="mt-12 flex flex-wrap gap-4">
-            {stats.map((s, i) => (
-              <Paper
-                key={s.label}
-                rotate={tilts[i % tilts.length]}
-                className="min-w-28 !p-4 text-center">
-                <p className="font-display text-3xl text-terracotta-600">
-                  {s.value}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-sand-600">
+          <dl className="mt-10 grid grid-cols-3 gap-4 border-y border-sand-300/80 py-4 sm:max-w-lg sm:gap-6">
+            {stats.map((s) => (
+              <div key={s.label} className="min-w-0">
+                <dt className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-sand-600">
                   {s.label}
-                </p>
-              </Paper>
+                </dt>
+                <dd className="mt-0.5 font-display text-2xl font-medium text-terracotta-600 sm:text-3xl">
+                  {s.value}
+                </dd>
+              </div>
             ))}
-          </div>
+          </dl>
         )}
 
-        <Paper tape rotate={-1.2} className="mt-12 max-w-md">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-green-600">
-            About this site
-          </p>
-          <p className="mt-2 text-sm text-sand-800">
-            Designed and built from scratch with Next.js, FastAPI and
-            PostgreSQL. Everything on this page is editable from a private admin
-            dashboard I wrote for it.
-          </p>
-        </Paper>
+        {/* Lightweight Colophon Strip */}
+        <p className="mt-5 font-mono text-[11px] leading-relaxed text-sand-500">
+          <span className="font-semibold uppercase tracking-[0.16em] text-green-700">
+            Colophon //
+          </span>{" "}
+          Built from scratch with Next.js, FastAPI &amp; PostgreSQL — editable
+          live from a custom admin dashboard.
+        </p>
       </div>
 
+      {/* ── Right Column: Existing TiltCard (Untouched) ── */}
       <TiltCard
         name={name}
-        role="Informatics Student & Web Developer"
+        role={role}
         location="East Bekasi, Indonesia"
         status="Open to work"
-        photo={profile?.hero_image_url || "/images/profile.webp"}
+        photo={profile?.hero_image_url?.trim() || "/images/profile.webp"}
       />
     </section>
   );

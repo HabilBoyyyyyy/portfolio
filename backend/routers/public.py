@@ -10,7 +10,21 @@ router = APIRouter(prefix="/api", tags=["public"])
 def get_profile(db: Session = Depends(get_db)):
     profile = db.query(models.Profile).first()
     if not profile:
-        raise HTTPException(404, "Profile not set up yet")
+        # Return sensible default profile instead of throwing 404 on fresh DB
+        return schemas.ProfileOut(
+            name="Habil Baihaki Ramadhan",
+            role="Full-Stack Developer & AI Engineer",
+            tagline="I build digital experiences that matter.",
+            bio=(
+                "Informatics student at President University with a focus on AI/ML and "
+                "full-stack web development. I build systems where software meets the real world "
+                "— from IoT-connected campus apps to robotic arms and industrial inspection prototypes."
+            ),
+            email="habilramadhan1005@gmail.com",
+            stat_projects="6+",
+            stat_years="2+",
+            stat_certs="4+",
+        )
     return profile
 
 @router.get("/skills", response_model=list[schemas.SkillOut])
