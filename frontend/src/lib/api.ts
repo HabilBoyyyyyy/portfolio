@@ -99,7 +99,13 @@ async function get<T>(path: string, fallback: T): Promise<T> {
   }
 }
 
-export const getProfile = () => get<Profile | null>("/api/profile", null);
+export async function getProfile(): Promise<Profile | null> {
+  const profile = await get<Profile | null>("/api/profile", null);
+  if (profile?.resume_url && profile.resume_url.startsWith("data:application/pdf")) {
+    profile.resume_url = "/api/resume";
+  }
+  return profile;
+}
 export const getSkills = () => get<Skill[]>("/api/skills", []);
 export const getProjects = () => get<Project[]>("/api/projects", []);
 export const getProject = (slug: string) =>
