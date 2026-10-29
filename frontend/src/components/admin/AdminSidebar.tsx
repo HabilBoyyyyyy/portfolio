@@ -156,7 +156,13 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({
+  isOpen = false,
+  onClose,
+}: {
+  isOpen?: boolean;
+  onClose?: () => void;
+}) {
   const pathname = usePathname();
 
   async function handleLogout() {
@@ -170,23 +176,52 @@ export default function AdminSidebar() {
 
   return (
     <aside
-      className="group/sidebar fixed top-0 left-0 h-full w-[80px] hover:w-[260px] transition-all duration-300 ease-in-out z-40 bg-ink/95 backdrop-blur-md border-r border-sand-800/80 shadow-2xl flex flex-col justify-between py-5 pr-3 overflow-hidden select-none"
+      className={`group/sidebar fixed top-0 left-0 h-full z-50 bg-ink/95 backdrop-blur-md border-r border-sand-800/80 shadow-2xl flex flex-col justify-between py-5 pr-3 overflow-y-auto select-none transition-all duration-300 ease-in-out ${
+        isOpen
+          ? "translate-x-0 w-[270px]"
+          : "-translate-x-full md:translate-x-0"
+      } md:w-[80px] md:hover:w-[260px]`}
       aria-label="Admin Navigation">
       <div>
-        <div className="h-16 flex items-center pl-4 mb-4 overflow-hidden border-b border-sand-900/60">
-          <div className="w-11 h-11 rounded-full bg-sand-900 border border-sand-800 flex items-center justify-center flex-shrink-0 text-terracotta-500 shadow-inner">
-            <span className="font-display font-bold text-lg leading-none">
-              H
-            </span>
+        <div className="h-16 flex items-center justify-between pl-4 mb-4 border-b border-sand-900/60 pr-2">
+          <div className="flex items-center min-w-0">
+            <div className="w-11 h-11 rounded-full bg-sand-900 border border-sand-800 flex items-center justify-center flex-shrink-0 text-terracotta-500 shadow-inner">
+              <span className="font-display font-bold text-lg leading-none">
+                H
+              </span>
+            </div>
+            <div
+              className={`ml-3 transition-all duration-300 overflow-hidden whitespace-nowrap ${
+                isOpen ? "opacity-100 max-w-[170px]" : "opacity-0 max-w-0"
+              } md:opacity-0 md:max-w-0 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:max-w-[170px]`}>
+              <h2 className="font-display text-base text-ivory tracking-wider uppercase font-bold">
+                Admin
+              </h2>
+              <p className="font-mono text-[9px] uppercase tracking-widest text-sand-500">
+                Dashboard
+              </p>
+            </div>
           </div>
-          <div className="ml-3 opacity-0 max-w-0 group-hover/sidebar:opacity-100 group-hover/sidebar:max-w-[170px] transition-all duration-300 overflow-hidden whitespace-nowrap">
-            <h2 className="font-display text-base text-ivory tracking-wider uppercase font-bold">
-              Admin
-            </h2>
-            <p className="font-mono text-[9px] uppercase tracking-widest text-sand-500">
-              Dashboard
-            </p>
-          </div>
+
+          {/* Close button for mobile drawer */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close navigation"
+            className="md:hidden p-2 rounded-lg text-sand-400 hover:text-ivory hover:bg-sand-900 transition cursor-pointer">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
         <nav>
@@ -197,6 +232,7 @@ export default function AdminSidebar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    onClick={onClose}
                     className={`flex items-center pl-3.5 py-1.5 rounded-r-[50px] transition-all duration-200 group/link ${
                       isActive
                         ? "bg-terracotta-600/15 text-terracotta-400 font-semibold"
@@ -211,7 +247,12 @@ export default function AdminSidebar() {
                       {item.icon}
                     </span>
 
-                    <span className="ml-3.5 opacity-0 max-w-0 group-hover/sidebar:opacity-100 group-hover/sidebar:max-w-[170px] transition-all duration-300 overflow-hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider">
+                    <span
+                      className={`ml-3.5 transition-all duration-300 overflow-hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider ${
+                        isOpen
+                          ? "opacity-100 max-w-[170px]"
+                          : "opacity-0 max-w-0"
+                      } md:opacity-0 md:max-w-0 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:max-w-[170px]`}>
                       {item.label}
                     </span>
                   </Link>
@@ -225,6 +266,7 @@ export default function AdminSidebar() {
       <div className="pt-3 border-t border-sand-900/60 space-y-1">
         <Link
           href="/"
+          onClick={onClose}
           className="flex items-center pl-3.5 py-1.5 rounded-r-[50px] text-sand-400 hover:bg-sand-900/60 hover:text-ivory transition-all duration-200 group/link">
           <span className="w-11 h-11 rounded-full bg-sand-900/80 border border-sand-800/80 flex items-center justify-center flex-shrink-0 text-sand-400 group-hover/link:text-terracotta-400 group-hover/link:bg-sand-800 transition-colors">
             <svg
@@ -240,7 +282,10 @@ export default function AdminSidebar() {
               />
             </svg>
           </span>
-          <span className="ml-3.5 opacity-0 max-w-0 group-hover/sidebar:opacity-100 group-hover/sidebar:max-w-[170px] transition-all duration-300 overflow-hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider text-sand-400 group-hover/link:text-ivory">
+          <span
+            className={`ml-3.5 transition-all duration-300 overflow-hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider text-sand-400 group-hover/link:text-ivory ${
+              isOpen ? "opacity-100 max-w-[170px]" : "opacity-0 max-w-0"
+            } md:opacity-0 md:max-w-0 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:max-w-[170px]`}>
             View Site
           </span>
         </Link>
@@ -263,7 +308,10 @@ export default function AdminSidebar() {
               />
             </svg>
           </span>
-          <span className="ml-3.5 opacity-0 max-w-0 group-hover/sidebar:opacity-100 group-hover/sidebar:max-w-[170px] transition-all duration-300 overflow-hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider text-sand-400 group-hover/logout:text-[#f87171]">
+          <span
+            className={`ml-3.5 transition-all duration-300 overflow-hidden whitespace-nowrap font-mono text-xs uppercase tracking-wider text-sand-400 group-hover/logout:text-[#f87171] ${
+              isOpen ? "opacity-100 max-w-[170px]" : "opacity-0 max-w-0"
+            } md:opacity-0 md:max-w-0 md:group-hover/sidebar:opacity-100 md:group-hover/sidebar:max-w-[170px]`}>
             Logout
           </span>
         </button>

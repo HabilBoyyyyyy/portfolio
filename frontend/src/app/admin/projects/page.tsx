@@ -199,16 +199,16 @@ export default async function ProjectsAdminPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-4xl uppercase tracking-wider text-ink">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wider text-ink break-words">
           Projects Management
         </h1>
       </div>
 
       {/* Add New Project Card */}
-      <Paper rotate={-0.4} tape className="!p-8">
+      <Paper rotate={-0.4} tape className="max-sm:[rotate:0deg] !p-4 sm:!p-6 md:!p-8">
         <form action={createProject} className="space-y-6">
-          <h2 className="mb-2 border-b border-sand-200 pb-2 font-display text-2xl text-terracotta-600">
+          <h2 className="mb-2 border-b border-sand-200 pb-2 font-display text-xl sm:text-2xl text-terracotta-600">
             Add New Project
           </h2>
 
@@ -300,7 +300,7 @@ export default async function ProjectsAdminPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition hover:-translate-y-0.5 hover:bg-terracotta-700">
+              className="w-full sm:w-auto rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition hover:-translate-y-0.5 hover:bg-terracotta-700 cursor-pointer text-center">
               + Add Project
             </button>
           </div>
@@ -309,10 +309,10 @@ export default async function ProjectsAdminPage() {
 
       {/* Current Projects List with ▲ / ▼ Reorder Controls */}
       <div className="space-y-4">
-        <div className="pl-2">
-          <h2 className="font-display text-2xl uppercase tracking-wider text-ink">
+        <div className="pl-1 sm:pl-2">
+          <h2 className="font-display text-xl sm:text-2xl uppercase tracking-wider text-ink">
             Current Projects
-            <span className="ml-3 font-mono text-sm normal-case tracking-normal text-sand-500">
+            <span className="block sm:inline sm:ml-3 font-mono text-xs sm:text-sm normal-case tracking-normal text-sand-500 mt-1 sm:mt-0">
               {projects.length} total · {visibleCount} visible (Top 6 shown on
               Home Page)
             </span>

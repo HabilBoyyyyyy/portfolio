@@ -134,7 +134,7 @@ export default async function SectionsAdminPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-sand-200 pb-5">
         <div>
-          <h1 className="font-display text-4xl uppercase tracking-wider text-ink">
+          <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wider text-ink break-words">
             Section Visibility
           </h1>
           <p className="mt-1 font-mono text-xs text-sand-500">
@@ -149,7 +149,7 @@ export default async function SectionsAdminPage() {
         </span>
       </div>
 
-      <Paper rotate={-0.3} tape className="!p-6 sm:!p-8">
+      <Paper rotate={-0.3} tape className="max-sm:[rotate:0deg] !p-4 sm:!p-6 md:!p-8">
         <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
           {sections.map((section) => (
             <div

@@ -138,20 +138,20 @@ export default async function TimelineAdminPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-4xl uppercase tracking-wider text-ink">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wider text-ink break-words">
           Journey &amp; Timeline Management
         </h1>
       </div>
 
       {/* Add New Milestone Card */}
-      <Paper rotate={-0.4} tape className="!p-8">
+      <Paper rotate={-0.4} tape className="max-sm:[rotate:0deg] !p-4 sm:!p-6 md:!p-8">
         <form action={createTimelineItem} className="space-y-6">
-          <h2 className="mb-2 border-b border-sand-200 pb-2 font-display text-2xl text-terracotta-600">
+          <h2 className="mb-2 border-b border-sand-200 pb-2 font-display text-xl sm:text-2xl text-terracotta-600">
             Add New Milestone
           </h2>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
             <div>
               <label className={labelClass}>Year / Era *</label>
               <input
@@ -198,7 +198,7 @@ export default async function TimelineAdminPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition hover:-translate-y-0.5 hover:bg-terracotta-700">
+              className="w-full sm:w-auto rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory shadow-md transition hover:-translate-y-0.5 hover:bg-terracotta-700 cursor-pointer text-center">
               + Add Milestone
             </button>
           </div>
@@ -207,10 +207,10 @@ export default async function TimelineAdminPage() {
 
       {/* Current Milestones List with ▲ / ▼ Reorder Controls */}
       <div className="space-y-4">
-        <div className="pl-2">
-          <h2 className="font-display text-2xl uppercase tracking-wider text-ink">
+        <div className="pl-1 sm:pl-2">
+          <h2 className="font-display text-xl sm:text-2xl uppercase tracking-wider text-ink">
             Current Milestones
-            <span className="ml-3 font-mono text-sm normal-case tracking-normal text-sand-500">
+            <span className="block sm:inline sm:ml-3 font-mono text-xs sm:text-sm normal-case tracking-normal text-sand-500 mt-1 sm:mt-0">
               {items.length} total
             </span>
           </h2>

@@ -112,7 +112,7 @@ export default function ImageUpload({
             setPreview(val.trim() ? val : null);
           }}
           placeholder="Paste URL or choose file..."
-          className="flex-1 rounded border border-sand-300 px-3 py-1.5 text-sm outline-none focus:border-terracotta-600 font-mono"
+          className="flex-1 min-w-0 rounded border border-sand-300 px-3 py-1.5 text-sm outline-none focus:border-terracotta-600 font-mono"
         />
 
         <button

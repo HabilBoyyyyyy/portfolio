@@ -107,7 +107,7 @@ export default async function ProfileAdminPage() {
           <Paper
             tape
             rotate={0.2}
-            className="max-sm:[rotate:0deg] !p-6 sm:!p-7">
+            className="max-sm:[rotate:0deg] !p-4 sm:!p-7">
             <div className="mb-5 flex items-center justify-between border-b border-sand-200 pb-3">
               <h2 className="font-display text-xl text-ink">
                 Identity &amp; Story
@@ -191,7 +191,7 @@ export default async function ProfileAdminPage() {
           {/* ── Right Column: Metrics & Media Assets ── */}
           <div className="space-y-6">
             {/* Hero Stats */}
-            <Paper rotate={-0.2} className="max-sm:[rotate:0deg] !p-6">
+            <Paper rotate={-0.2} className="max-sm:[rotate:0deg] !p-4 sm:!p-6">
               <div className="mb-4 flex items-center justify-between border-b border-sand-200 pb-2.5">
                 <h2 className="font-display text-xl text-ink">
                   Hero Metrics Strip
@@ -201,7 +201,7 @@ export default async function ProfileAdminPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 <div>
                   <label className={labelClass}>Projects</label>
                   <input
@@ -233,7 +233,7 @@ export default async function ProfileAdminPage() {
             </Paper>
 
             {/* Assets & Uploads */}
-            <Paper rotate={0.2} className="max-sm:[rotate:0deg] !p-6">
+            <Paper rotate={0.2} className="max-sm:[rotate:0deg] !p-4 sm:!p-6">
               <div className="mb-4 flex items-center justify-between border-b border-sand-200 pb-2.5">
                 <h2 className="font-display text-xl text-ink">
                   Media &amp; CV Assets
@@ -279,14 +279,14 @@ export default async function ProfileAdminPage() {
         </div>
 
         {/* ── Sticky / Bottom Save Bar ── */}
-        <div className="flex items-center justify-between rounded-sm border border-sand-300 bg-sand-50/90 px-5 py-3.5">
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between rounded-sm border border-sand-300 bg-sand-50/90 p-4 sm:px-5 sm:py-3.5">
           <p className="font-mono text-[11px] text-sand-600">
             Saving immediately updates both <span className="text-ink">/</span>{" "}
             (Hero &amp; About) and <span className="text-ink">/admin</span>.
           </p>
           <button
             type="submit"
-            className="rounded-full bg-terracotta-600 px-7 py-2.5 font-mono text-xs uppercase tracking-[0.18em] text-ivory transition hover:bg-terracotta-700">
+            className="w-full sm:w-auto rounded-full bg-terracotta-600 px-7 py-2.5 font-mono text-xs uppercase tracking-[0.18em] text-ivory transition hover:bg-terracotta-700 cursor-pointer text-center">
             Save Profile Changes
           </button>
         </div>

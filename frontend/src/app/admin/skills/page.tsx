@@ -134,15 +134,15 @@ export default async function SkillsAdminPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-4xl text-ink uppercase tracking-wider">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-2xl sm:text-4xl text-ink uppercase tracking-wider break-words">
           Skills Management
         </h1>
       </div>
 
-      <Paper rotate={-0.5} tape className="!p-8">
+      <Paper rotate={-0.5} tape className="max-sm:[rotate:0deg] !p-4 sm:!p-6 md:!p-8">
         <form action={createSkill} className="space-y-6">
-          <h2 className="font-display text-2xl text-terracotta-600 mb-2 border-b border-sand-200 pb-2">
+          <h2 className="font-display text-xl sm:text-2xl text-terracotta-600 mb-2 border-b border-sand-200 pb-2">
             Add New Skill
           </h2>
 
@@ -211,7 +211,7 @@ export default async function SkillsAdminPage() {
           <div className="flex justify-end pt-4">
             <button
               type="submit"
-              className="rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory transition hover:bg-terracotta-700 shadow-md hover:-translate-y-0.5">
+              className="w-full sm:w-auto rounded-full bg-terracotta-600 px-6 py-2.5 font-mono text-xs uppercase tracking-widest text-ivory transition hover:bg-terracotta-700 shadow-md hover:-translate-y-0.5 cursor-pointer text-center">
               + Add Skill
             </button>
           </div>
@@ -219,10 +219,10 @@ export default async function SkillsAdminPage() {
       </Paper>
 
       <div className="space-y-8">
-        <div className="pl-2">
-          <h2 className="font-display text-2xl text-ink uppercase tracking-wider">
+        <div className="pl-1 sm:pl-2">
+          <h2 className="font-display text-xl sm:text-2xl text-ink uppercase tracking-wider">
             Current Skills
-            <span className="ml-3 font-mono text-sm text-sand-500 normal-case tracking-normal">
+            <span className="block sm:inline sm:ml-3 font-mono text-xs sm:text-sm text-sand-500 normal-case tracking-normal mt-1 sm:mt-0">
               {skills.length} total ·{" "}
               {skills.filter((s: Skill) => s.visible).length} visible
             </span>
@@ -269,77 +269,79 @@ export default async function SkillsAdminPage() {
                           ? "opacity-60 border-dashed border-sand-300 bg-sand-100/50"
                           : "border-sand-200 hover:shadow-md hover:border-terracotta-300"
                       }`}>
-                      <div className="flex items-center justify-between gap-4">
-                        {/* Left: Reorder Controls */}
-                        <div className="flex flex-col gap-1 shrink-0">
-                          <form action={moveSkill}>
-                            <input
-                              type="hidden"
-                              name="reorder_payload"
-                              value={upPayload ?? ""}
-                            />
-                            <button
-                              type="submit"
-                              disabled={!upPayload}
-                              title="Move Up"
-                              className="w-7 h-7 flex items-center justify-center rounded border border-sand-300 bg-white text-sand-600 text-xs hover:bg-sand-100 hover:border-terracotta-400 hover:text-terracotta-600 transition disabled:opacity-20 disabled:cursor-not-allowed">
-                              ▲
-                            </button>
-                          </form>
-                          <form action={moveSkill}>
-                            <input
-                              type="hidden"
-                              name="reorder_payload"
-                              value={downPayload ?? ""}
-                            />
-                            <button
-                              type="submit"
-                              disabled={!downPayload}
-                              title="Move Down"
-                              className="w-7 h-7 flex items-center justify-center rounded border border-sand-300 bg-white text-sand-600 text-xs hover:bg-sand-100 hover:border-terracotta-400 hover:text-terracotta-600 transition disabled:opacity-20 disabled:cursor-not-allowed">
-                              ▼
-                            </button>
-                          </form>
-                        </div>
-
-                        {/* Order badge */}
-                        <div className="shrink-0 w-8 h-8 rounded-full bg-sand-200 flex items-center justify-center font-mono text-xs font-bold text-sand-700">
-                          #{skill.order}
-                        </div>
-
-                        {/* Skill info */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          {skill.icon_url ? (
-                            /* eslint-disable-next-line @next/next/no-img-element */
-                            <img
-                              src={skill.icon_url}
-                              alt=""
-                              className="w-9 h-9 flex-shrink-0 object-contain p-0.5 bg-white rounded border border-sand-200"
-                            />
-                          ) : (
-                            <div className="w-9 h-9 bg-terracotta-100 text-terracotta-700 rounded flex items-center justify-center font-display text-base flex-shrink-0">
-                              {skill.name[0]}
-                            </div>
-                          )}
-                          <div className="min-w-0">
-                            <p className="font-display text-lg text-ink truncate leading-tight">
-                              {skill.name}
-                            </p>
-                            {skill.description && (
-                              <p className="text-xs text-sand-600 mt-0.5 truncate">
-                                {skill.description}
-                              </p>
+                          {/* Left: Reorder Controls */}
+                          <div className="flex flex-col gap-1 shrink-0">
+                            <form action={moveSkill}>
+                              <input
+                                type="hidden"
+                                name="reorder_payload"
+                                value={upPayload ?? ""}
+                              />
+                              <button
+                                type="submit"
+                                disabled={!upPayload}
+                                title="Move Up"
+                                className="w-7 h-7 flex items-center justify-center rounded border border-sand-300 bg-white text-sand-600 text-xs hover:bg-sand-100 hover:border-terracotta-400 hover:text-terracotta-600 transition disabled:opacity-20 disabled:cursor-not-allowed">
+                                ▲
+                              </button>
+                            </form>
+                            <form action={moveSkill}>
+                              <input
+                                type="hidden"
+                                name="reorder_payload"
+                                value={downPayload ?? ""}
+                              />
+                              <button
+                                type="submit"
+                                disabled={!downPayload}
+                                title="Move Down"
+                                className="w-7 h-7 flex items-center justify-center rounded border border-sand-300 bg-white text-sand-600 text-xs hover:bg-sand-100 hover:border-terracotta-400 hover:text-terracotta-600 transition disabled:opacity-20 disabled:cursor-not-allowed">
+                                ▼
+                              </button>
+                            </form>
+                          </div>
+
+                          {/* Order badge */}
+                          <div className="shrink-0 w-8 h-8 rounded-full bg-sand-200 flex items-center justify-center font-mono text-xs font-bold text-sand-700">
+                            #{skill.order}
+                          </div>
+
+                          {/* Skill info */}
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            {skill.icon_url ? (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img
+                                src={skill.icon_url}
+                                alt=""
+                                className="w-9 h-9 flex-shrink-0 object-contain p-0.5 bg-white rounded border border-sand-200"
+                              />
+                            ) : (
+                              <div className="w-9 h-9 bg-terracotta-100 text-terracotta-700 rounded flex items-center justify-center font-display text-base flex-shrink-0">
+                                {skill.name[0]}
+                              </div>
                             )}
-                            <p className="font-mono text-[10px] text-sand-400 mt-1 uppercase tracking-widest">
-                              {skill.visible
-                                ? "✓ Visible on Site"
-                                : "✗ Hidden from Public"}
-                            </p>
+                            <div className="min-w-0">
+                              <p className="font-display text-lg text-ink truncate leading-tight">
+                                {skill.name}
+                              </p>
+                              {skill.description && (
+                                <p className="text-xs text-sand-600 mt-0.5 truncate">
+                                  {skill.description}
+                                </p>
+                              )}
+                              <p className="font-mono text-[10px] text-sand-400 mt-1 uppercase tracking-widest">
+                                {skill.visible
+                                  ? "✓ Visible on Site"
+                                  : "✗ Hidden from Public"}
+                              </p>
+                            </div>
                           </div>
                         </div>
 
                         {/* Right: Quick Actions */}
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center justify-end gap-2 shrink-0 pt-2 border-t border-sand-200/60 sm:border-t-0 sm:pt-0">
                           <form action={toggleVisible}>
                             <input type="hidden" name="id" value={skill.id} />
                             <button

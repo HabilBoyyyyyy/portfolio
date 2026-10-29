@@ -119,7 +119,7 @@ export default async function AdminMessagesPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-sand-200 pb-5">
         <div>
-          <h1 className="font-display text-4xl uppercase tracking-wider text-ink">
+          <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wider text-ink break-words">
             Inbox &amp; Dispatches
           </h1>
           <p className="mt-1 font-mono text-xs text-sand-500">
